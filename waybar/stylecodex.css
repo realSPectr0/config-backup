@@ -1,0 +1,152 @@
+@import url("/home/arch/.cache/wal/colors-waybar.css");
+
+/* We use @foreground and @color7 from your wal colors 
+   to keep it matching your wallpaper without forced blue.
+*/
+@define-color bar-bg rgba(15, 15, 15, 0.92);
+@define-color bar-border rgba(255, 255, 255, 0.1);
+@define-color main-white @foreground;
+@define-color dimmed-white alpha(@foreground, 0.5);
+
+* {
+  border: none;
+  border-radius: 0;
+  margin: 0;
+  padding: 0;
+  font-family: "JetBrainsMono Nerd Font", sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+window#waybar {
+  background: transparent;
+}
+
+/* Individual Pill Modules */
+#workspaces button,
+#clock,
+#cpu,
+#memory,
+#tray,
+#custom-launcher,
+#custom-status {
+  background: @bar-bg;
+  color: @main-white;
+  border: 1px solid @bar-border;
+
+  /* Large border radius for the pill shape */
+  border-radius: 100px;
+
+  /* Increased padding for that "chunky" look */
+  padding: 5px 15px;
+  margin: 6px 4px;
+
+  /* High contrast shadow to make it pop off the wallpaper */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+}
+
+/* Workspaces */
+#workspaces {
+  background: @bar-bg;
+  border: 1px solid @bar-border;
+  border-radius: 100px;
+  margin: 6px 4px;
+  padding: 0px 4px;
+  /* Space inside the pill before the buttons start */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+}
+
+/* This styles the numbers inside the pill */
+#workspaces button {
+  background: transparent;
+  color: @dimmed-white;
+  border: none;
+  border-radius: 100px;
+  padding: 5px 12px;
+  margin: 4px 2px;
+  transition: all 0.2s ease;
+}
+
+/* The active workspace "highlight" pill */
+#workspaces button.active {
+  background: @main-white;
+  /* Bright highlight for the current workspace */
+  color: #000000;
+  /* Dark number on light background */
+  font-weight: 800;
+}
+
+#workspaces button:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: @main-white;
+}
+
+/* Clock & Icons */
+#clock {
+  font-weight: 800;
+  /* Uses your wallpaper's 7th color for a subtle, non-blue highlight */
+  color: @color7;
+}
+
+#tray {
+  padding: 0 12px;
+}
+
+/* Hover effect for all pills */
+#workspaces button:hover,
+#clock:hover,
+#battery:hover {
+  background: alpha(@foreground, 0.15);
+  transition: all 0.2s ease;
+}
+
+/* TASKBAR */
+#taskbar {
+  background: @bar-bg;
+  border: 1px solid @bar-border;
+  border-radius: 100px;
+  margin: 6px 4px;
+  padding: 0px 6px;
+}
+
+#taskbar button {
+  background: transparent;
+  border: none;
+  padding: 5px 8px;
+  margin: 4px 2px;
+}
+
+#taskbar button.active {
+  background: @main-white;
+  /* The light pill for the active app */
+  border-radius: 100px;
+}
+
+#workspaces,
+/* keeping this here if you use it */
+#taskbar,
+/* keeping this here if you use it */
+#hardware {
+  /* Use your theme variables so it matches the clock/workspaces */
+  background: @bar-bg-strong;
+  border: 1px solid @bar-border;
+
+  /* Use the larger padding for the better "pill" shape */
+  padding: 2px 12px;
+  margin: 6px 4px;
+  border-radius: 100px;
+
+  /* Keep the shadow for depth */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+}
+
+/* IMPORTANT: Remove backgrounds/margins from the icons so they fit inside */
+#pulseaudio,
+#network,
+#battery {
+  background: transparent;
+  border: none;
+  margin: 2px;
+  padding: 0 6px;
+  /* Spacing between icons inside the pill */
+}

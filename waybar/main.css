@@ -1,0 +1,128 @@
+@import "colors.css";
+
+* {
+    all: unset;
+    font-family: "Rubik", "JetBrainsMono Nerd Font Propo", "Noto Sans CJK JP", "Noto Sans CJK KR";
+
+}
+
+tooltip {
+    background-color: @bg1;
+    color: @fg;
+    border-radius: 12px;
+}
+
+#mpd,
+#mpris,
+#cava,
+#clock,
+#custom-launcher {
+    background-color: @bg1;
+    color: @fg;
+    margin: 0px 0 0 10;
+    padding: 0px 13px;
+    border-radius: 15px;
+}
+
+
+.modules-center {
+    background-color: @bg1;
+    color: @fg;
+    padding: 0px 10px;
+    border-radius: 40px;
+}
+
+ .modules-right {
+    background-color: @bg1;
+    color: @fg;
+    padding: 0px 10px;
+    margin: 0 10;
+    border-radius: 20px;
+}
+
+#clock {
+    color: lightblue;
+    font-weight: 500;
+}
+
+#workspaces {
+    padding: 5px 13px;
+    background-color: @bg1;
+    font-size: 0.95rem;
+    padding: 0px 0px;
+    margin: 5 0;
+    border-radius: 99px; 
+}
+
+#workspaces button:hover {
+    background: @fg;
+    color: @bg4;
+}
+
+#workspaces button {
+    background-color: @bg3;
+    padding: 2px 5px;
+    border-radius: 10px;
+    margin: 0 5px;
+    transition: all 300ms ease-in-out;
+    min-width: 80px;
+}
+
+#workspaces button.empty {
+    color: @grey0;
+    padding: 0px 3px;
+}
+
+#workspaces button.active {
+    background-color: lightblue;
+    color: @bg1;
+    padding: 0px 15px;
+    border-radius: 10px;
+    min-width: 75px;
+    font-weight: 500;
+    transition: all 0.3s ease-in-out;
+}
+
+#workspaces button.urgent {
+    background-color: @blue;
+}
+
+#battery {
+    padding: 0px 10px;
+    background-color: rgb(122, 184, 205);
+    color: @bg1;
+    border-radius: 10px;
+    margin: 5px 3px;
+    font-weight: 500;
+}
+
+#battery.warning {
+    background-color: @yellow;
+}
+
+#battery.critical {
+    background-color: @red;
+}
+
+#network,
+#pulseaudio {
+    padding: 3px 8px;
+    background-color: @bg3;
+    color: lightblue;
+    border-radius: 10px;
+    margin: 5px 3px;
+    font-weight: 500;
+}
+
+#custom-notification {
+    margin: 0 10px;
+}
+
+#mpris.spotify {
+    font-weight: bold;
+}
+
+#cava {
+    color: rgb(122, 184, 205);
+}
+

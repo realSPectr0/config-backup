@@ -1,0 +1,154 @@
+{
+    "layer": "top",
+    "position": "top",
+    "height": 36,
+    "margin-top": 6,
+    "margin-left": 8,
+    "margin-right": 8,
+    "spacing": 0,
+
+    "modules-left": [
+        "custom/launcher",
+        "hyprland/workspaces",
+        "mpris"
+    ],
+
+    "modules-center": [
+        "custom/term",
+        "custom/files",
+        "custom/browser",
+        "custom/discord",
+        "custom/spotify",
+        "custom/screenshot"
+    ],
+
+    "modules-right": [
+        "custom/notification",
+        "network",
+        "pulseaudio",
+        "battery",
+        "clock",
+        "custom/power"
+    ],
+
+    // ── Left ─────────────────────────────────────────────────────────────────
+
+    "custom/launcher": {
+        "format": "󰣇",
+        "on-click": "bash /home/arch/.config/waybar/Scripts/app-launcher.sh",
+        "tooltip": false
+    },
+
+    "hyprland/workspaces": {
+        "format": "{name}",
+        "on-click": "activate",
+        "active-only": false,
+        "all-outputs": false,
+        "show-special": false
+    },
+
+    "mpris": {
+        "format": "{status_icon}",
+        "format-paused": "",
+        "player-icons": { "default": "" },
+        "status-icons": { "playing": "", "paused": "" },
+        "dynamic-order": [],
+        "max-length": 1,
+        "tooltip": false
+    },
+
+    // ── Center ────────────────────────────────────────────────────────────────
+
+    "custom/term": {
+        "format": "",
+        "on-click": "kitty",
+        "tooltip-format": "Terminal"
+    },
+    "custom/files": {
+        "format": "󰉋",
+        "on-click": "thunar",
+        "tooltip-format": "Files"
+    },
+    "custom/browser": {
+        "format": "󰖟",
+        "on-click": "firefox",
+        "tooltip-format": "Browser"
+    },
+    "custom/discord": {
+        "format": "󰙯",
+        "on-click": "discord",
+        "tooltip-format": "Discord"
+    },
+    "custom/spotify": {
+        "format": "",
+        "on-click": "spotify",
+        "tooltip-format": "Spotify"
+    },
+    "custom/screenshot": {
+        "format": "",
+        "on-click": "grimblast copy area",
+        "tooltip-format": "Screenshot"
+    },
+
+    // ── Right ─────────────────────────────────────────────────────────────────
+
+    "custom/notification": {
+        "format": "{icon}",
+        "format-icons": {
+            "notification": "󰂚",
+            "none": "󰂜",
+            "dnd-notification": "󰂛",
+            "dnd-none": "󰂛",
+            "inhibited-notification": "󰂚",
+            "inhibited-none": "󰂜",
+            "dnd-inhibited-notification": "󰂛",
+            "dnd-inhibited-none": "󰂛"
+        },
+        "return-type": "json",
+        "exec-if": "which swaync-client",
+        "exec": "swaync-client -swb",
+        "on-click": "swaync-client -t -sw",
+        "on-click-right": "swaync-client -d -sw",
+        "escape": true,
+        "tooltip": false
+    },
+
+    "network": {
+        "format-wifi": "󰤨",
+        "format-ethernet": "󰈀",
+        "format-disconnected": "󰤭",
+        "tooltip-format": "{essid} ({signalStrength}%)",
+        "on-click": "nm-connection-editor"
+    },
+
+    "pulseaudio": {
+        "format": "{icon} {volume}%",
+        "format-muted": "󰝟 {volume}%",
+        "format-icons": {
+            "default": ["󰕿", "󰖀", "󰕾"]
+        },
+        "on-click": "pavucontrol",
+        "scroll-step": 2,
+        "tooltip": false
+    },
+
+    "battery": {
+        "format": "{icon} {capacity}%",
+        "format-charging": "󰂄 {capacity}%",
+        "format-icons": ["󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"],
+        "states": { "warning": 30, "critical": 15 },
+        "tooltip": false
+    },
+
+    "clock": {
+        "format": "{:%I:%M %p}",
+        "tooltip-format": "<big>{:%A, %B %d %Y}</big>",
+        "interval": 60
+    },
+
+    "custom/power": {
+        "format": "󰐥",
+        "on-click": "wlogout",
+        "tooltip-format": "Power menu"
+    }
+}

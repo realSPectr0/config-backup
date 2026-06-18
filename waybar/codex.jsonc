@@ -1,0 +1,91 @@
+{
+  "layer": "bottom",
+  "position": "bottom",
+  "height": 28,
+  "spacing": 6,
+  "margin": "4 8 8 8",
+  "modules-left": [
+    "hyprland/workspaces",
+    "hyprland/submap",
+    "clock"
+  ],
+  "modules-center": [
+    "wlr/taskbar"
+  ],
+  "modules-right": [
+    "group/hardware"
+    
+  ],
+  "group/hardware": {
+    "orientation": "horizontal",
+    "modules": [
+      "pulseaudio",
+      "network",
+      "battery"
+    ]
+  },
+  "hyprland/workspaces": {
+    "format": "{name}",
+    "show-special": false,
+    "all-outputs": true,
+    "persistent-workspaces": {
+        // This tells monitor 1 (e.g., DP-1) to only stay at 1-5
+        "DP-1": [1, 2, 3, 4, 5], 
+        // Or use the wildcard if you want ALL monitors capped at 5
+        "*": [1, 2, 3, 4, 5] 
+    }
+  },
+  "hyprland/submap": {
+    "format": " {submap}",
+    "tooltip": false
+  },
+  "hyprland/window": {
+    "max-length": 70,
+    "separate-outputs": true
+  },
+  "wlr/taskbar": {
+    "format": "{icon}",
+    "on-click": "activate",
+    "icon-size": 28,
+    "tooltip-format": "{title}"
+  },
+  "pulseaudio": {
+    "format": "{icon} {volume}%",
+    "format-muted": " muted",
+    "format-icons": {
+      "default": [
+        "",
+        "",
+        ""
+      ]
+    },
+    "on-click": "pavucontrol",
+    "scroll-step": 5
+  },
+  "network": {
+    "format-wifi": " {signalStrength}%",
+    "format-ethernet": " {ipaddr}",
+    "format-disconnected": "offline",
+    "tooltip-format": "{ifname} {ipaddr}",
+    "on-click": "iwdgui"
+  },
+  "battery": {
+    "format": "{capacity}% {icon}",
+    "format-icons": [
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "on-click": "~/.config/waybar/Scripts/battery-menu-user.sh"
+  },
+  "clock": {
+    "format": " {:%I:%M %p}",
+    "format-alt": " {:%a %b %d}"
+  },
+  "custom/clipboard": {
+    "format": "",
+    "on-click": "cliphist list | wofi --dmenu | cliphist decode | wl-copy"
+  }
+}

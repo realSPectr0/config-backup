@@ -1,0 +1,218 @@
+{
+    "spacing": 10,
+    "layer": "top",
+    "margin-top": 10,
+    "position": "top",
+    "modules-left": [
+        "custom/launcher",
+        "clock",
+        "mpris",
+        "cava"
+    ],
+    "modules-center": [
+        "hyprland/workspaces"
+    ],
+    "modules-right": [
+        "custom/notification",
+        "pulseaudio",
+        "network",
+        "battery"
+    ],
+    "clock": {
+        "interval": 60,
+        "format": "{:%I:%M %p}",
+        "max-length": 25,
+        "tooltip": false
+    },
+    "hyprland/workspaces": {
+        "format": "{icon}",
+        "format-icons": {
+            "1": "",
+            "2": "",
+            "3": "󱓞",
+            "4": "",
+            "5": "",
+            "6": ""
+        },
+        "persistent-workspaces": {
+            "eDP-1": [
+                1,
+                2,
+                3,
+                4,
+                5
+            ],
+            "HDMI-A-3": [
+                1,
+                2,
+                3,
+                4,
+                5
+            ]
+        }
+    },
+    "pulseaudio": {
+        "format": "{volume}% {icon}",
+        "format-bluetooth": "{volume} {icon}",
+        "format-muted": "Muted  ",
+        "format-icons": {
+            "headphone": "",
+            "hands-free": "",
+            "headset": "",
+            "phone": "",
+            "phone-muted": "",
+            "portable": "",
+            "car": "",
+            "default": [
+                "",
+                "",
+                ""
+            ]
+        },
+        "scroll-step": 1,
+        "on-click": "pavucontrol",
+        "ignored-sinks": [
+            "Easy Effects Sink"
+        ]
+    },
+    "network": {
+        // "interface": "wlp2*", // (Optional) To force the use of this interface
+        "format-wifi": "  Network",
+        "format-ethernet": "{ipaddr}/{cidr} ",
+        "tooltip-format": "{ifname} via {gwaddr} ",
+        "format-linked": "{ifname} (No IP) ",
+        "format-disconnected": "Disconnected ⚠",
+        "on-click": "nm-connection-editor"
+    },
+    "battery": {
+        "format": "{capacity} {icon}",
+        "format-icons": {
+            "default": [
+                "󰂎",
+                "󰁺",
+                "󰁻",
+                "󰁼",
+                "󰁽",
+                "󰁾",
+                "󰁿",
+                "󰂀",
+                "󰂁",
+                "󰂂",
+                "󰁹"
+            ],
+            "charging": [
+                "󰢟",
+                "󰢜",
+                "󰂆",
+                "󰂇",
+                "󰂈",
+                "󰢝",
+                "󰂉",
+                "󰢞",
+                "󰂊",
+                "󰂋",
+                "󰂅"
+            ]
+        },
+        "states": {
+            "warning": 30,
+            "critical": 15
+        }
+    },
+    "custom/launcher": {
+        "format": "󰣇",
+        "on-click": "bash /home/$USER/.config/waybar/Scripts/app-launcher.sh",
+        "tooltip-format": "Launcher"
+    },
+    "custom/notification": {
+        "tooltip": true,
+        "format": "{icon}",
+        "format-icons": {
+            "notification": "",
+            "none": "",
+            "dnd-notification": "",
+            "dnd-none": "",
+            "inhibited-notification": "",
+            "inhibited-none": "",
+            "dnd-inhibited-notification": "",
+            "dnd-inhibited-none": ""
+        },
+        "return-type": "json",
+        "exec-if": "which swaync-client",
+        "exec": "swaync-client -swb",
+        "on-click": "swaync-client -t -sw",
+        "on-click-right": "swaync-client -d -sw",
+        "escape": true
+    },
+    "mpd": {
+        "format": "{stateIcon} {artist} - {title} ({elapsedTime:%M:%S}/{totalTime:%M:%S}) ",
+        "format-disconnected": "Disconnected ",
+        "format-stopped": "{consumeIcon}{randomIcon}{repeatIcon}{singleIcon}Stopped ",
+        "unknown-tag": "N/A",
+        "interval": 2,
+        "consume-icons": {
+            "on": " "
+        },
+        "random-icons": {
+            "off": "<span color=\"#f53c3c\"></span> ",
+            "on": " "
+        },
+        "repeat-icons": {
+            "on": " "
+        },
+        "single-icons": {
+            "on": "1 "
+        },
+        "state-icons": {
+            "paused": "",
+            "playing": ""
+        },
+        "tooltip-format": "MPD (connected)",
+        "tooltip-format-disconnected": "MPD (disconnected)",
+        "on-click": "mpc toggle",
+        "on-scroll-up": "mpc next",
+        "on-scroll-down": "mpc prev"
+    },
+    "mpris": {
+        "format": "<span color='#1DB954'>{player_icon}</span>  {title}    {status_icon} ",
+        "max-length": 15, // Change this number to fit your screen
+        "dynamic-order": [
+            "title",
+            "artist"
+        ],
+        "player-icons": {
+            "default": "▶",
+            "spotify": ""
+        },
+        "status-icons": {
+            "playing": "⏸",
+            "paused": "▶"
+        }
+    },
+    "cava": {
+        "framerate": 60,
+        "gravity": 100,
+        "autosens": 0,
+        "sensitivity": 1.2,
+        "bars": 8, 
+        "lower_cutoff_freq": 5,
+        "higher_cutoff_freq": 3000,
+        "method": "pulse",
+        "max-length": 10,
+        "source": "auto",
+        "reverse": false,
+        "bar_delimiter": 0,
+        "monstercat": false, 
+        "waves": true,
+        "noise_reduction": 0.3,
+        "format-icons": [
+            " ",
+            "▂",
+            "▃",
+            "▄",
+            "▅",
+            "▆",
+            "▇"
+        ]
+    }
+}

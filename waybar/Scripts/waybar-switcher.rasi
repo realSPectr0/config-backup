@@ -1,0 +1,91 @@
+/**
+ * Waybar theme switcher rofi theme
+ * Matches waybar dark aesthetic
+ **/
+
+@import "/home/arch/.config/rofi/wallpaper-colors.rasi"
+
+* {
+    background:     @rofi-bg;
+    background-alt: @rofi-bg-alt;
+    foreground:     @rofi-fg;
+    selected-bg:    @rofi-selected-bg;
+    selected-fg:    @rofi-accent;
+    border-col:     @rofi-border;
+    font:           "JetBrainsMono Nerd Font Propo Bold 11";
+}
+
+window {
+    transparency:       "real";
+    location:           center;
+    anchor:             center;
+    width:              320px;
+    border-radius:      20px;
+    border:             0px;
+    background-color:   @background;
+    padding:            8px;
+}
+
+mainbox {
+    spacing:            0px;
+    background-color:   transparent;
+    children:           [ "inputbar", "listview" ];
+}
+
+inputbar {
+    enabled:            true;
+    spacing:            8px;
+    padding:            10px 14px;
+    margin:             0px 0px 6px 0px;
+    border-radius:      14px;
+    background-color:   @background-alt;
+    text-color:         @foreground;
+    children:           [ "prompt", "entry" ];
+}
+
+prompt {
+    enabled:            true;
+    background-color:   transparent;
+    text-color:         @selected-fg;
+}
+
+entry {
+    enabled:            true;
+    background-color:   transparent;
+    text-color:         @foreground;
+    placeholder:        "select theme...";
+    placeholder-color:  @rofi-muted;
+    cursor:             text;
+}
+
+listview {
+    enabled:            true;
+    columns:            1;
+    lines:              6;
+    cycle:              true;
+    dynamic:            true;
+    scrollbar:          false;
+    spacing:            4px;
+    background-color:   transparent;
+}
+
+element {
+    enabled:            true;
+    padding:            10px 14px;
+    border-radius:      12px;
+    background-color:   transparent;
+    text-color:         @foreground;
+    cursor:             pointer;
+}
+
+element selected.normal {
+    background-color:   @selected-bg;
+    text-color:         @selected-fg;
+}
+
+element-text {
+    background-color:   transparent;
+    text-color:         inherit;
+    vertical-align:     0.5;
+    horizontal-align:   0.0;
+}

@@ -1,0 +1,128 @@
+/**
+ * Wallpaper-themed rofi power menu
+ **/
+
+@import "/home/arch/.config/rofi/wallpaper-colors.rasi"
+
+* {
+    font:             "JetBrainsMono Nerd Font Propo Bold 12";
+    background:       @rofi-bg;
+    background-alt:   @rofi-bg-alt;
+    background-glass: @rofi-bg-glass;
+    background-alt-glass: @rofi-bg-alt-glass;
+    foreground:       @rofi-fg;
+    selected-bg:      @rofi-selected-bg;
+    selected-strong:  @rofi-selected-strong;
+    selected-fg:      @rofi-accent;
+    border-col:       @rofi-border;
+    muted:            @rofi-muted;
+}
+
+configuration {
+    show-icons:       false;
+}
+
+window {
+    transparency:     "real";
+    location:         center;
+    anchor:           center;
+    width:            740px;
+    border-radius:    18px;
+    border:           0px;
+    background-color: @background-glass;
+    padding:          10px;
+}
+
+mainbox {
+    spacing:          10px;
+    background-color: transparent;
+    orientation:      horizontal;
+    children:         [ "imagebox", "actionbox" ];
+}
+
+imagebox {
+    enabled:          true;
+    expand:           false;
+    width:            230px;
+    border-radius:    14px;
+    background-color: @background-alt-glass;
+    background-image: @rofi-wallpaper-image;
+    orientation:      vertical;
+    children:         [ "dummy" ];
+}
+
+dummy {
+    background-color: transparent;
+}
+
+actionbox {
+    spacing:          8px;
+    padding:          0px;
+    background-color: transparent;
+    orientation:      vertical;
+    children:         [ "inputbar", "listview" ];
+}
+
+inputbar {
+    enabled:          true;
+    padding:          12px 14px;
+    border-radius:    10px;
+    background-color: @background-alt-glass;
+    text-color:       @foreground;
+    children:         [ "prompt" ];
+}
+
+prompt {
+    enabled:          true;
+    background-color: transparent;
+    text-color:       @selected-fg;
+    horizontal-align: 0.5;
+}
+
+entry {
+    enabled:          false;
+}
+
+listview {
+    enabled:          true;
+    columns:          3;
+    lines:            2;
+    fixed-columns:    true;
+    fixed-height:     true;
+    cycle:            true;
+    dynamic:          true;
+    scrollbar:        false;
+    spacing:          8px;
+    background-color: transparent;
+}
+
+element {
+    enabled:          true;
+    padding:          16px 10px;
+    border-radius:    10px;
+    background-color: transparent;
+    cursor:           pointer;
+    text-color:       @foreground;
+}
+
+element normal.normal {
+    background-color: transparent;
+    text-color:       @foreground;
+}
+
+element alternate.normal {
+    background-color: transparent;
+    text-color:       @foreground;
+}
+
+element selected.normal {
+    background-color: @selected-strong;
+    text-color:       @selected-fg;
+}
+
+element-text {
+    background-color: transparent;
+    text-color:       inherit;
+    vertical-align:   0.5;
+    horizontal-align: 0.5;
+}

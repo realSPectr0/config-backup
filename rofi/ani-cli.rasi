@@ -1,0 +1,90 @@
+/**
+ * ani-cli rofi theme
+ * Matches waybar switcher aesthetic
+ **/
+
+* {
+    background:     #121318;
+    background-alt: #1e1f25;
+    foreground:     #e2e2e9;
+    selected-bg:    rgba(176, 198, 255, 0.15);
+    selected-fg:    #b0c6ff;
+    border-col:     rgba(89, 89, 89, 0.6);
+    font:           "JetBrainsMono Nerd Font Propo Bold 11";
+}
+
+window {
+    transparency:       "real";
+    location:           center;
+    anchor:             center;
+    width:              700px;
+    border-radius:      20px;
+    border:             1px;
+    border-color:       @border-col;
+    background-color:   @background;
+    padding:            8px;
+}
+
+mainbox {
+    spacing:            0px;
+    background-color:   transparent;
+    children:           [ "inputbar", "listview" ];
+}
+
+inputbar {
+    enabled:            true;
+    spacing:            8px;
+    padding:            10px 14px;
+    margin:             0px 0px 6px 0px;
+    border-radius:      14px;
+    background-color:   @background-alt;
+    text-color:         @foreground;
+    children:           [ "prompt", "entry" ];
+}
+
+prompt {
+    enabled:            true;
+    background-color:   transparent;
+    text-color:         #b0c6ff;
+}
+
+entry {
+    enabled:            true;
+    background-color:   transparent;
+    text-color:         @foreground;
+    placeholder:        "search...";
+    placeholder-color:  #8f9099;
+    cursor:             text;
+}
+
+listview {
+    enabled:            true;
+    columns:            1;
+    lines:              10;
+    cycle:              true;
+    dynamic:            true;
+    scrollbar:          false;
+    spacing:            4px;
+    background-color:   transparent;
+}
+
+element {
+    enabled:            true;
+    padding:            10px 14px;
+    border-radius:      12px;
+    background-color:   transparent;
+    text-color:         @foreground;
+    cursor:             pointer;
+}
+
+element selected.normal {
+    background-color:   @selected-bg;
+    text-color:         @selected-fg;
+}
+
+element-text {
+    background-color:   transparent;
+    text-color:         inherit;
+    vertical-align:     0.5;
+    horizontal-align:   0.0;
+}

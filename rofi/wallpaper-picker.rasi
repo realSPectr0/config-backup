@@ -1,0 +1,104 @@
+/**
+ * Wallpaper picker rofi theme
+ * Matches ani-cli / waybar switcher aesthetic
+ **/
+
+@import "/home/arch/.config/rofi/wallpaper-colors.rasi"
+
+* {
+    background:     @rofi-bg;
+    background-alt: @rofi-bg-alt;
+    foreground:     @rofi-fg;
+    selected-bg:    @rofi-selected-bg;
+    selected-fg:    @rofi-accent;
+    border-col:     @rofi-border;
+    font:           "JetBrainsMono Nerd Font Propo Bold 11";
+}
+
+window {
+    transparency:       "real";
+    location:           center;
+    anchor:             center;
+    x-offset:           0px;
+    y-offset:           0px;
+    width:              748px;
+    border-radius:      20px;
+    border:             0px;
+    background-color:   @background;
+    padding:            8px;
+}
+
+mainbox {
+    spacing:            0px;
+    background-color:   transparent;
+    children:           [ "inputbar", "listview" ];
+}
+
+inputbar {
+    enabled:            true;
+    spacing:            6px;
+    padding:            10px 14px;
+    margin:             0px 0px 8px 0px;
+    border-radius:      14px;
+    background-color:   @background-alt;
+    text-color:         @foreground;
+    children:           [ "prompt", "entry" ];
+}
+
+prompt {
+    enabled:            true;
+    background-color:   transparent;
+    text-color:         @selected-fg;
+}
+
+entry {
+    enabled:            true;
+    background-color:   transparent;
+    text-color:         @foreground;
+    placeholder:        "pick wallpaper...";
+    placeholder-color:  @rofi-muted;
+    cursor:             text;
+}
+
+listview {
+    enabled:            true;
+    columns:            3;
+    lines:              2;
+    cycle:              true;
+    dynamic:            true;
+    scrollbar:          false;
+    fixed-columns:      true;
+    fixed-height:       true;
+    spacing:            8px;
+    background-color:   transparent;
+}
+
+element {
+    enabled:            true;
+    padding:            0px;
+    border-radius:      12px;
+    background-color:   transparent;
+    text-color:         @foreground;
+    cursor:             pointer;
+    orientation:        vertical;
+    spacing:            6px;
+}
+
+element selected.normal {
+    background-color:   @selected-bg;
+    text-color:         @selected-fg;
+}
+
+element-icon {
+    size:               240px;
+    padding:            0px;
+    background-color:   transparent;
+}
+
+element-text {
+    background-color:   transparent;
+    text-color:         inherit;
+    padding:            6px 10px 10px 10px;
+    vertical-align:     0.5;
+    horizontal-align:   0.5;
+}

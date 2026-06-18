@@ -1,0 +1,70 @@
+@import "/home/arch/.cache/wal/colors-rofi-dark.rasi"
+
+* {
+  font: "Iosevka Nerd Font 11";
+  text-color: @foreground;
+  background-color: transparent;
+  border-color: @selected-normal-background;
+}
+
+#window {
+  background-color: @background;
+  border: 1px;
+  border-color: @border-color;
+  border-radius: 10px;
+  padding: 12px;
+}
+
+#mainbox {
+  padding: 0;
+  spacing: 8px;
+}
+
+#message {
+  border: 1px;
+  border-color: @border-color;
+  border-radius: 8px;
+  padding: 6px 10px;
+  background-color: @background;
+}
+
+#textbox {
+  text-color: @foreground;
+}
+
+#inputbar {
+  border: 1px;
+  border-color: @border-color;
+  border-radius: 8px;
+  padding: 4px 8px;
+  background-color: @background;
+}
+
+#prompt {
+  text-color: @normal-foreground;
+}
+
+#listview {
+  spacing: 6px;
+  scrollbar: false;
+  padding: 6px 0px 0px;
+}
+
+#element {
+  border: 1px;
+  border-color: transparent;
+  border-radius: 8px;
+  padding: 8px 10px;
+  background-color: @background;
+  text-color: @normal-foreground;
+}
+
+#element.selected.normal {
+  background-color: @selected-normal-background;
+  text-color: @selected-normal-foreground;
+}
+
+#element.selected.active {
+  background-color: @selected-active-background;
+  text-color: @selected-active-foreground;
+}

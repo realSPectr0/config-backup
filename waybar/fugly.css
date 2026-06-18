@@ -1,0 +1,178 @@
+* {
+    all: unset;
+    font-family: "JetBrainsMono Nerd Font Propo", "Rubik", sans-serif;
+    font-size: 13px;
+}
+
+window#waybar {
+    background: rgba(18, 14, 28, 0.82);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 10px;
+    color: #cdd6f4;
+}
+
+tooltip {
+    background: rgba(18, 14, 28, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    color: #cdd6f4;
+}
+
+/* ── Shared pill wrapper ───────────────────────────────────────────────────── */
+
+.modules-left,
+.modules-center,
+.modules-right {
+    padding: 0 4px;
+}
+
+/* ── Every module: equal vertical centering ────────────────────────────────── */
+
+#custom-launcher,
+#workspaces,
+#mpris,
+#custom-term,
+#custom-files,
+#custom-browser,
+#custom-discord,
+#custom-spotify,
+#custom-screenshot,
+#custom-notification,
+#network,
+#pulseaudio,
+#battery,
+#clock,
+#custom-power {
+    padding: 0 10px;
+    color: rgba(205, 214, 244, 0.75);
+    transition: color 0.2s ease, background 0.2s ease;
+}
+
+/* ── Launcher icon ─────────────────────────────────────────────────────────── */
+
+#custom-launcher {
+    font-size: 16px;
+    color: #cba6f7;
+    padding: 0 12px 0 8px;
+}
+
+#custom-launcher:hover {
+    color: #ffffff;
+}
+
+/* ── Workspaces ────────────────────────────────────────────────────────────── */
+
+#workspaces button {
+    padding: 0 8px;
+    color: rgba(205, 214, 244, 0.45);
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    min-width: 0;
+}
+
+#workspaces button.active {
+    color: #cdd6f4;
+    background: rgba(203, 166, 247, 0.15);
+}
+
+#workspaces button:hover {
+    color: #cdd6f4;
+    background: rgba(255, 255, 255, 0.07);
+}
+
+/* ── mpris dot ─────────────────────────────────────────────────────────────── */
+
+#mpris {
+    font-size: 8px;
+    color: rgba(205, 214, 244, 0.35);
+    padding: 0 6px;
+}
+
+#mpris.playing {
+    color: #a6e3a1;
+}
+
+/* ── Center app shortcuts ──────────────────────────────────────────────────── */
+
+#custom-term,
+#custom-files,
+#custom-browser,
+#custom-discord,
+#custom-spotify,
+#custom-screenshot {
+    font-size: 14px;
+    padding: 0 9px;
+    color: rgba(205, 214, 244, 0.5);
+}
+
+#custom-term:hover,
+#custom-files:hover,
+#custom-browser:hover,
+#custom-discord:hover,
+#custom-spotify:hover,
+#custom-screenshot:hover {
+    color: #cdd6f4;
+}
+
+/* ── Right icons ───────────────────────────────────────────────────────────── */
+
+#custom-notification {
+    font-size: 14px;
+}
+
+#custom-notification.dnd-none,
+#custom-notification.dnd-notification {
+    color: rgba(205, 214, 244, 0.35);
+}
+
+#network {
+    font-size: 15px;
+}
+
+#network.disconnected {
+    color: #f38ba8;
+}
+
+#pulseaudio {
+    padding: 0 8px;
+}
+
+#pulseaudio.muted {
+    color: rgba(205, 214, 244, 0.35);
+}
+
+#battery {
+    padding: 0 8px;
+}
+
+#battery.warning {
+    color: #f9e2af;
+}
+
+#battery.critical {
+    color: #f38ba8;
+}
+
+#clock {
+    color: #cdd6f4;
+    font-weight: 500;
+    padding: 0 10px;
+}
+
+#custom-power {
+    font-size: 15px;
+    color: rgba(205, 214, 244, 0.55);
+    padding: 0 8px 0 6px;
+}
+
+#custom-power:hover {
+    color: #f38ba8;
+}
+
+/* ── Separator between left/right groups ───────────────────────────────────── */
+
+#network {
+    border-left: 1px solid rgba(255, 255, 255, 0.07);
+    border-right: 1px solid rgba(255, 255, 255, 0.07);
+    margin: 8px 0;
+}

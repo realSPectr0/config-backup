@@ -23,6 +23,8 @@
 !kitty/**
 !mpd/
 !mpd/**
+mpd/database
+mpd/state
 !mpv/
 !mpv/**
 !nautilus/
@@ -56,3 +58,10 @@
 !starship.toml
 !mimeapps.list
 !user-dirs.dirs
+
+# Ignore generated files and local secrets after directory allow-rules
+__pycache__/
+*.pyc
+.env
+*.api_key
+.wallhaven_api_key

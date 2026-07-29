@@ -1,7 +1,7 @@
 {
   "uiScale": 1,
-  "openGuideAtStartup": true,
-  "topbarHelpIcon": true,
+  "openGuideAtStartup": false,
+  "topbarHelpIcon": false,
   "wallpaperDir": "/home/arch/Pictures/Wallpapers",
   "language": "us,cn",
   "kbOptions": "grp:alt_shift_toggle",

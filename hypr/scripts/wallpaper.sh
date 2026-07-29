@@ -58,13 +58,15 @@ if ! awww img "$WALLPAPER" --resize "$resize_mode" --transition-type grow --tran
     exit 1
 fi
 
-# Generate kitty colors from the selected wallpaper.
-if command -v wal >/dev/null 2>&1; then
-    wal -i "$WALLPAPER" --backend kitty >/dev/null 2>&1 || true
-fi
-
 # Generate colors (smart matugen - picks best preference per wallpaper)
 python3 "$SCRIPT_DIR/matugen-smart.py" "$WALLPAPER"
+
+# Regenerate Pywal-compatible outputs from the same palette. This keeps Kitty,
+# legacy Rofi themes, shell colors, and other Pywal consumers in sync.
+if command -v wal >/dev/null 2>&1; then
+    wal --theme "$COLORS_JSON" -n >/dev/null 2>&1 || true
+fi
+
 python3 "$SCRIPT_DIR/rofi-wallpaper-theme.py" "$WALLPAPER" >/dev/null 2>&1 || true
 
 # Generate Luminary quickshell bar colors
@@ -82,7 +84,7 @@ print(f'C4={c[\"color4\"].lstrip(\"#\")}')
 print(f'C5={c[\"color6\"].lstrip(\"#\")}')
 print(f'C8={c[\"color1\"].lstrip(\"#\")}')
 ")"
-GRAPHICS_CONF="$HOME/.config/hypr/modules/graphics.conf"
+GRAPHICS_CONF="$HOME/.config/hypr/modules/looknfeel.conf"
 if [ -n "$C4" ] && [ -f "$GRAPHICS_CONF" ]; then
     sed -i \
         -e "s/col\.active_border = .*/col.active_border = rgba(${C4}ee) rgba(${C5}ee) 45deg/" \

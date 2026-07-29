@@ -25,6 +25,6 @@ fi
 
 jq -cn \
     --arg text "$text" \
-    --arg tooltip "${player:-Media player}: $status" \
+    --arg tooltip "${player:-Media player} · $status\n$text" \
     --arg class "${status,,}" \
     '{text: $text, tooltip: $tooltip, class: [$class, "active"]}'

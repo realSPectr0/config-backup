@@ -17,6 +17,28 @@ import numpy as np
 COLORS_JSON = Path.home() / ".cache" / "wal" / "colors.json"
 
 
+def get_image_saturation(image_path: str) -> float:
+    """Return the mean HSL saturation of a small image sample."""
+    img = Image.open(image_path).convert("RGB").resize((96, 96), Image.LANCZOS)
+    pixels = np.asarray(img, dtype=np.float32) / 255.0
+    maximum = pixels.max(axis=2)
+    minimum = pixels.min(axis=2)
+    delta = maximum - minimum
+    lightness = (maximum + minimum) / 2.0
+    denominator = 1.0 - np.abs(2.0 * lightness - 1.0)
+    saturation = np.divide(
+        delta,
+        denominator,
+        out=np.zeros_like(delta),
+        where=denominator > 1e-6,
+    )
+    return float(saturation.mean())
+
+
+def is_monochrome(image_path: str) -> bool:
+    return get_image_saturation(image_path) < 0.08
+
+
 def get_dominant_hue(image_path: str) -> float:
     """Get the dominant hue of the image by sampling pixels."""
     img = Image.open(image_path).convert("RGB")
@@ -109,12 +131,34 @@ def build_palette(colors: dict) -> dict:
     }
 
 
+def grayscale(hex_color: str) -> str:
+    value = hex_color.lstrip("#")
+    red, green, blue = (int(value[index:index + 2], 16) for index in (0, 2, 4))
+    level = round(0.2126 * red + 0.7152 * green + 0.0722 * blue)
+    return f"#{level:02x}{level:02x}{level:02x}"
+
+
+def grayscale_palette(palette: dict) -> dict:
+    return {
+        section: {name: grayscale(value) for name, value in values.items()}
+        for section, values in palette.items()
+    }
+
+
 def main():
     if len(sys.argv) < 2:
         sys.exit(1)
 
     import hashlib
+
+    if sys.argv[1] == "--is-monochrome":
+        if len(sys.argv) < 3:
+            sys.exit(1)
+        print("1" if is_monochrome(sys.argv[2]) else "0")
+        sys.exit(0)
+
     image_path = sys.argv[1]
+    monochrome = is_monochrome(image_path)
     COLORS_JSON.parent.mkdir(parents=True, exist_ok=True)
 
     # Check cache
@@ -126,9 +170,12 @@ def main():
 
     if cache_file.exists():
         palette = json.loads(cache_file.read_text())
+        if monochrome:
+            palette = grayscale_palette(palette)
         COLORS_JSON.write_text(json.dumps(palette, indent=4))
         c = palette["colors"]
-        print(f"primary={c['color4']} accent={c['color6']}")
+        mode = "monochrome" if monochrome else "color"
+        print(f"mode={mode} primary={c['color4']} accent={c['color6']}")
         sys.exit(0)
 
     # Get dominant hue of image
@@ -159,11 +206,14 @@ def main():
         sys.exit(1)
 
     palette = build_palette(best_colors)
-    COLORS_JSON.write_text(json.dumps(palette, indent=4))
     cache_file.write_text(json.dumps(palette, indent=4))
+    if monochrome:
+        palette = grayscale_palette(palette)
+    COLORS_JSON.write_text(json.dumps(palette, indent=4))
 
     c = palette["colors"]
-    print(f"primary={c['color4']} accent={c['color6']}")
+    mode = "monochrome" if monochrome else "color"
+    print(f"mode={mode} primary={c['color4']} accent={c['color6']}")
 
 
 if __name__ == "__main__":

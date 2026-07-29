@@ -1,0 +1,242 @@
+@import "whitewashed-colors.css";
+
+@define-color bar_bg alpha(@lum_base, 0.94);
+@define-color surface @lum_surface0;
+@define-color surface_hover @lum_surface1;
+@define-color border alpha(@lum_text, 0.08);
+@define-color text @lum_text;
+@define-color muted @lum_subtext0;
+@define-color blue @lum_blue;
+@define-color cyan @lum_sapphire;
+@define-color green @lum_green;
+@define-color yellow @lum_yellow;
+@define-color red @lum_red;
+
+* {
+    border: none;
+    border-radius: 0;
+    min-height: 0;
+    font-family: "JetBrainsMono Nerd Font Propo", "Fira Sans", sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+window#waybar {
+    background: @bar_bg;
+    color: @text;
+    border-bottom: 1px solid @border;
+}
+
+tooltip {
+    background: @lum_mantle;
+    color: @text;
+    border: 1px solid @border;
+    border-radius: 6px;
+}
+
+tooltip label {
+    padding: 7px 9px;
+    color: @text;
+}
+
+.modules-left,
+.modules-center,
+.modules-right {
+    padding: 0 8px;
+}
+
+/* Launcher */
+#custom-name {
+    min-width: 28px;
+    margin: 6px 8px 6px 0;
+    padding: 0 10px;
+    background: @blue;
+    color: @lum_base;
+    border-radius: 5px;
+    font-weight: 700;
+}
+
+#custom-name:hover {
+    background: @lum_mauve;
+}
+
+/* Workspaces */
+#workspaces {
+    margin: 5px 5px 5px 0;
+}
+
+#workspaces button {
+    min-width: 21px;
+    margin: 2px;
+    padding: 0 5px;
+    color: @muted;
+    border-radius: 4px;
+    transition: background-color 150ms ease, color 150ms ease;
+}
+
+#workspaces button.empty {
+    color: @lum_overlay1;
+}
+
+#workspaces button.active {
+    background: @surface;
+    color: @text;
+    box-shadow: inset 0 -2px @blue;
+}
+
+#workspaces button.urgent {
+    background: @red;
+    color: @lum_base;
+}
+
+#workspaces button:hover {
+    background: @surface_hover;
+    color: @text;
+}
+
+/* Running applications */
+#taskbar {
+    margin: 6px 0;
+    padding-left: 6px;
+    border-left: 1px solid @border;
+}
+
+#taskbar button {
+    min-width: 25px;
+    margin: 0 2px;
+    padding: 0 4px;
+    color: @muted;
+    border-radius: 4px;
+    transition: background-color 150ms ease, color 150ms ease;
+}
+
+#taskbar button.active {
+    background: @surface;
+    color: @text;
+}
+
+#taskbar button:hover {
+    background: @surface_hover;
+}
+
+/* Media status */
+#custom-music {
+    min-width: 0;
+    margin: 6px 0;
+    padding: 0 12px;
+    color: @muted;
+    border-radius: 4px;
+}
+
+#custom-music.active {
+    background: @surface;
+    color: @text;
+}
+
+#custom-music.active:hover {
+    background: @surface_hover;
+}
+
+#custom-music.paused {
+    color: @muted;
+}
+
+#custom-music.playing {
+    box-shadow: inset 0 -2px @lum_mauve;
+}
+
+#custom-music.idle {
+    color: @lum_overlay1;
+}
+
+/* System status */
+#backlight,
+#network,
+#bluetooth,
+#pulseaudio,
+#battery,
+#clock,
+#custom-tray-toggle {
+    margin: 6px 1px;
+    padding: 0 8px;
+    color: @muted;
+    border-radius: 4px;
+    transition: background-color 150ms ease, color 150ms ease;
+}
+
+#backlight:hover,
+#network:hover,
+#bluetooth:hover,
+#pulseaudio:hover,
+#battery:hover,
+#clock:hover,
+#custom-tray-toggle:hover {
+    background: @surface_hover;
+    color: @text;
+}
+
+#backlight {
+    color: @yellow;
+}
+
+#network {
+    color: @blue;
+}
+
+#network.disconnected {
+    color: @red;
+}
+
+#bluetooth {
+    color: @lum_mauve;
+}
+
+#pulseaudio {
+    color: @lum_peach;
+}
+
+#pulseaudio.muted {
+    color: @muted;
+}
+
+#battery {
+    color: @text;
+}
+
+#battery.charging,
+#battery.plugged {
+    background: @green;
+    color: @text;
+}
+
+#battery.warning {
+    color: @yellow;
+}
+
+#battery.critical:not(.charging) {
+    color: @red;
+}
+
+#clock {
+    margin-left: 5px;
+    padding-left: 12px;
+    color: @text;
+    border-left: 1px solid @border;
+    font-weight: 600;
+}
+
+#group-tray-drawer {
+    margin-left: 2px;
+}
+
+#custom-tray-toggle {
+    padding: 0 6px;
+    color: @muted;
+}
+
+#tray {
+    margin: 6px 2px;
+    padding: 0 6px;
+    background: @surface;
+    border-radius: 4px;
+}

@@ -17,7 +17,7 @@ declare -A THEMES
 THEMES["  Complex"]="main.jsonc|main.css|maincolors.css"
 THEMES["  Minimal"]="minmal.jsonc|minimal.css|minimalcolor.css"
 THEMES["  Fugly"]="fugly.jsonc|fugly.css|maincolors.css"
-THEMES["  SnarkyDev"]="snarky.jsonc|snarky.css|maincolors.css"
+THEMES["  Whitewashed"]="whitewashed.jsonc|whitewashed.css|maincolors.css"
 THEMES["  Nocturne"]="qs:$QS_BAR_DIR||"
 THEMES["  Luminary"]="qsm:$QS_MANAGER||"
 
@@ -28,7 +28,7 @@ if [[ -n "${1:-}" ]]; then
         complex|main) CHOSEN="  Complex" ;;
         minimal|minmal) CHOSEN="  Minimal" ;;
         fugly) CHOSEN="  Fugly" ;;
-        snarky|snarkydev) CHOSEN="  SnarkyDev" ;;
+        white|whitewashed) CHOSEN="  Whitewashed" ;;
         *) CHOSEN="$1" ;;
     esac
 else

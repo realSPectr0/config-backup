@@ -1,8 +1,10 @@
 {
+    "name": "whitewashed",
     "layer": "top",
     "position": "top",
-    "height": 44,
+    "height": 38,
     "spacing": 0,
+    "reload_style_on_change": true,
 
     "modules-left": [
         "custom/name",
@@ -26,7 +28,7 @@
     "hyprland/workspaces": {
         "on-click": "activate",
         "active-only": false,
-        "all-outputs": true,
+        "all-outputs": false,
         "format": "{}",
         "format-icons": {
             "urgent": "",
@@ -62,6 +64,7 @@
         "exec": "~/.config/waybar/Scripts/music.sh",
         "return-type": "json",
         "format": "{}",
+        "max-length": 42,
         "restart-interval": 1,
         "escape": true,
         "on-click": "bash -c 'playerctl play-pause || spotify-launcher'",
@@ -71,22 +74,22 @@
 
     // Name label
     "custom/name": {
-        "format": "Apps",
+        "format": "󰣇  Apps",
         "tooltip": false,
         "on-click": "bash ~/.config/waybar/Scripts/app-launcher.sh"
     },
 
     // Network
     "network": {
-        "format": "{ifname}",
-        "format-wifi": "   {signalStrength}%",
-        "format-ethernet": "  {ipaddr}",
-        "format-disconnected": "Not connected",
+        "format": "󰈀",
+        "format-wifi": "  {signalStrength}%",
+        "format-ethernet": "󰈀",
+        "format-disconnected": "󰖪",
         "tooltip-format": " {ifname} via {gwaddr}",
         "tooltip-format-wifi": "   {essid} ({signalStrength}%)",
         "tooltip-format-ethernet": "  {ifname} ({ipaddr}/{cidr})",
         "tooltip-format-disconnected": "Disconnected",
-        "max-length": 50,
+        "max-length": 18,
         "on-click": "kitty -e nmtui"
     },
 
@@ -96,8 +99,8 @@
             "warning": 30,
             "critical": 15
         },
-        "format": "{icon}   {capacity}%",
-        "format-charging": "  {capacity}%",
+        "format": "{icon}  {capacity}%",
+        "format-charging": "󰂄  {capacity}%",
         "format-plugged": "  {capacity}%",
         "format-alt": "{icon}  {time}",
         "format-icons": [" ", " ", " ", " ", " "]
@@ -105,12 +108,12 @@
 
     // Pulseaudio
     "pulseaudio": {
-        "format": "{icon} {volume}%",
-        "format-bluetooth": "{volume}%  {icon} {format_source}",
-        "format-bluetooth-muted": "  {icon} {format_source}",
-        "format-muted": "  {format_source}",
-        "format-source": "{volume}% ",
-        "format-source-muted": "",
+        "format": "{icon}  {volume}%",
+        "format-bluetooth": "  {volume}%",
+        "format-bluetooth-muted": "  󰝟",
+        "format-muted": "󰝟  Muted",
+        "format-source": "",
+        "format-source-muted": "",
         "format-icons": {
             "headphone": "",
             "hands-free": "",
@@ -120,7 +123,9 @@
             "car": "",
             "default": ["", " ", " "]
         },
-        "on-click": "pavucontrol"
+        "scroll-step": 2,
+        "on-click": "pavucontrol",
+        "on-click-right": "pactl set-sink-mute @DEFAULT_SINK@ toggle"
     },
 
     // Bluetooth
@@ -135,9 +140,21 @@
 
     // Clock
     "clock": {
-        "format": "{:%H:%M %a}",
+        "format": "{:%a  %b %d   %I:%M %p}",
         "on-click": "notify-send -a Calendar Calendar \"$(cal)\"",
-        "tooltip": false
+        "tooltip-format": "<tt><small>{calendar}</small></tt>",
+        "calendar": {
+            "mode": "month",
+            "weeks-pos": "right",
+            "on-scroll": 1,
+            "format": {
+                "months": "<b>{}</b>",
+                "days": "{}",
+                "weeks": "<span color='#9299a8'>W{}</span>",
+                "weekdays": "<span color='#7aa2f7'><b>{}</b></span>",
+                "today": "<span color='#73daca'><b><u>{}</u></b></span>"
+            }
+        }
     },
 
     // System tray
@@ -153,7 +170,7 @@
     },
 
     "custom/tray-toggle": {
-        "format": " ",
+        "format": "󰅀",
         "tooltip": false
     },
 
@@ -162,5 +179,10 @@
         "spacing": 10
     },
 
-    "backlight": {}
+    "backlight": {
+        "format": "{icon}  {percent}%",
+        "format-icons": ["󰃞", "󰃟", "󰃠"],
+        "on-scroll-up": "brightnessctl set +5%",
+        "on-scroll-down": "brightnessctl set 5%-"
+    }
 }

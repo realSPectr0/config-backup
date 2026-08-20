@@ -69,8 +69,17 @@ fi
 
 python3 "$SCRIPT_DIR/rofi-wallpaper-theme.py" "$WALLPAPER" >/dev/null 2>&1 || true
 
+# Keep Cava on the same primary -> accent gradient as the Hyprland border.
+if python3 "$SCRIPT_DIR/cava-wallpaper-theme.py" >/dev/null 2>&1; then
+    pkill -USR2 -x cava 2>/dev/null || true
+fi
+
 # Generate Luminary quickshell bar colors
 python3 "$SCRIPT_DIR/qs-matugen-colors.py" "$WALLPAPER" &>/dev/null &
+
+# Keep Obsidian's Live Background and Matugen palette in sync.
+OBSIDIAN_SYNC="$HOME/obsidian-vault/.obsidian/desktop-wallpaper/sync.py"
+[ -x "$OBSIDIAN_SYNC" ] && "$OBSIDIAN_SYNC" "$WALLPAPER" "$WALLPAPER" image &>/dev/null &
 
 # Derive quickshell bar theme from updated wal colors
 python3 "$HOME/.config/quickshell/bar/derive-theme.py" &>/dev/null &

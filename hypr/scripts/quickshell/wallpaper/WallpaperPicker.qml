@@ -168,6 +168,8 @@ Item {
                     export TARGET_MONITORS="${escOutputs}"
                     
                     cp "$DEST_FILE" ${Quickshell.env("HOME")}/.cache/current_wallpaper.png || true
+                    [ -x "${Quickshell.env("HOME")}/obsidian-vault/.obsidian/desktop-wallpaper/sync.py" ] && \
+                        "${Quickshell.env("HOME")}/obsidian-vault/.obsidian/desktop-wallpaper/sync.py" "$DEST_FILE" "$FINAL_THUMB" image &
                     pkill mpvpaper || true
                     
                     echo "" >> ${logFile}
@@ -210,6 +212,8 @@ Item {
                         magick "$DEST_FILE" -resize x420 -quality 70 "$FINAL_THUMB" || true
                         
                         cp "$DEST_FILE" ${Quickshell.env("HOME")}/.cache/current_wallpaper.png || true
+                        [ -x "${Quickshell.env("HOME")}/obsidian-vault/.obsidian/desktop-wallpaper/sync.py" ] && \
+                            "${Quickshell.env("HOME")}/obsidian-vault/.obsidian/desktop-wallpaper/sync.py" "$DEST_FILE" "$FINAL_THUMB" image &
                         pkill mpvpaper || true
                         
                         echo "" >> ${logFile}
@@ -267,6 +271,8 @@ Item {
 
         const fullScript = `
             cp "${isVideo ? escThumb : escOriginal}" ${Quickshell.env("HOME")}/.cache/current_wallpaper.png || true
+            [ -x "${Quickshell.env("HOME")}/obsidian-vault/.obsidian/desktop-wallpaper/sync.py" ] && \
+                "${Quickshell.env("HOME")}/obsidian-vault/.obsidian/desktop-wallpaper/sync.py" "${escOriginal}" "${escThumb}" "${isVideo ? "video" : "image"}" &
             pkill mpvpaper || true
             
             ${wallpaperCmd}

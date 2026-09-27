@@ -1,0 +1,20 @@
+#!/usr/bin/env sh
+
+set -eu
+
+config_dir="${XDG_CONFIG_HOME:-$HOME/.config}/fastfetch"
+cols="${CAFFYNE_COLUMNS:-$(tput cols 2>/dev/null || printf '80')}"
+
+case "$cols" in
+  ''|*[!0-9]*) cols=80 ;;
+esac
+
+if [ "$cols" -ge 132 ]; then
+  exec /usr/bin/fastfetch --config "$config_dir/caffyne.jsonc" "$@"
+elif [ "$cols" -ge 78 ]; then
+  exec /usr/bin/fastfetch --config "$config_dir/config-compact.jsonc" "$@"
+elif [ "$cols" -ge 42 ]; then
+  exec /usr/bin/fastfetch --config "$config_dir/config-compact.jsonc" --logo-position top "$@"
+else
+  exec /usr/bin/fastfetch --config "$config_dir/config-compact.jsonc" --logo none "$@"
+fi

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Reload Kitty instances
-killall -USR1 .kitty-wrapped
+bash "$HOME/.config/caffyne-shell/scripts/reload-kitty.sh"
 
 
 # Reload CAVA

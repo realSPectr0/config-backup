@@ -1,0 +1,8 @@
+com.github.PintaProject.Pinta
+com.ml4w.calendar
+com.ml4w.dotfilesinstaller
+com.ml4w.hyprlandsettings
+com.ml4w.settings
+com.ml4w.sidebar
+com.ml4w.welcome
+org.blender.Blender

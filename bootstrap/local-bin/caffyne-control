@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+CAFFYNE_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/caffyne-shell"
+PYTHON="$CAFFYNE_DIR/venv/bin/python"
+
+if [[ $# -lt 1 ]]; then
+    echo "Usage: caffyne-control <Applet>" >&2
+    echo "Applets: Launcher Settings Notifications Clock Calendar Weather Media Volume Wifi Bluetooth Energy Session Calculator Keyboard Processes Dash Wallpapers Themes EditApplets" >&2
+    exit 2
+fi
+
+APPLET=${1//\\/\\\\}
+APPLET=${APPLET//\'/\\\'}
+exec "$PYTHON" -m fabric execute caffyne-shell "bar_manager.toggle('$APPLET')"

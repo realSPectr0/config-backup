@@ -1,0 +1,118 @@
+// Responsive companion for test.jsonc (78-column side-by-side layout)
+{
+  "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json",
+  "logo": {
+    "source": "~/.config/fastfetch/caffyne.txt",
+    "type": "auto",
+    "color": {
+      "1": "#b4befe",
+      "2": "#b4befe"
+    },
+    "padding": {
+      "top": 0,
+      "left": 0,
+      "right": 2
+    },
+    "printRemaining": true
+  },
+  "display": {
+    "separator": " ",
+    "disableLinewrap": true,
+    "constants": [
+      "──────────────────────────────────",
+      "│\u001b[34C│\u001b[34D"
+    ],
+    "color": {
+      "title": "#b4befe"
+    }
+  },
+  "modules": [
+    {
+      "type": "custom",
+      "format": "{#90}╭─────── {#31}⊙ {#33}⊙ {#35}⊙ {#36}⊙     {#36}⊙ {#35}⊙ {#33}⊙ {#31}⊙ {#90}──────╮"
+    },
+    {
+      "type": "custom",
+      "format": "{#90}╭───────────────────── caffyne.org ╮"
+    },
+    {
+      "type": "title",
+      "key": "{#90}{$2}{#36}  User    ",
+      "format": "{user-name}@{host-name}"
+    },
+    {
+      "type": "uptime",
+      "key": "{#90}{$2}{#36} 󰅐 Uptime  ",
+      "format": "{hours}h {minutes}m"
+    },
+    {
+      "type": "datetime",
+      "key": "{#90}{$2}{#36}  Date    ",
+      "format": "{month-pretty}-{day-pretty} · {hour-pretty}:{minute-pretty}"
+    },
+    {
+      "type": "host",
+      "key": "{#90}{$2}{#36} 󰌢 Device  ",
+      "format": "{family}"
+    },
+    {
+      "type": "kernel",
+      "key": "{#90}{$2}{#35}  Kernel  ",
+      "format": "{release}"
+    },
+    {
+      "type": "os",
+      "key": "{#90}{$2}{#35}  Distro  ",
+      "format": "{name} · {arch}"
+    },
+    {
+      "type": "wm",
+      "key": "{#90}{$2}{#35}  Desktop ",
+      "format": "{pretty-name} · {protocol-name}"
+    },
+    {
+      "type": "terminal",
+      "key": "{#90}{$2}{#35}  Term    ",
+      "format": "{pretty-name} {version}"
+    },
+    {
+      "type": "packages",
+      "key": "{#90}{$2}{#35} 󰏖 Pkgs    ",
+      "format": "{all} total"
+    },
+    {
+      "type": "cpu",
+      "key": "{#90}{$2}{#34}  CPU     ",
+      "format": "{cores-physical}C/{cores-logical}T · {freq-max}"
+    },
+    {
+      "type": "gpu",
+      "key": "{#90}{$2}{#34} 󰾲 GPU     ",
+      "format": "{vendor} · {type}"
+    },
+    {
+      "type": "memory",
+      "key": "{#90}{$2}{#34}  Memory  ",
+      "format": "{used}/{total}"
+    },
+    {
+      "type": "disk",
+      "key": "{#90}{$2}{#34}  Disk    ",
+      "folders": "/",
+      "format": "{size-used}/{size-total}"
+    },
+    {
+      "type": "battery",
+      "key": "{#90}{$2}{#34}  Power   ",
+      "format": "{capacity}"
+    },
+    {
+      "type": "custom",
+      "format": "{#90}╰{$1}╯"
+    },
+    {
+      "type": "custom",
+      "format": "{#90}╰─────── {#31}⊙ {#33}⊙ {#35}⊙ {#36}⊙     {#36}⊙ {#35}⊙ {#33}⊙ {#31}⊙ {#90}──────╯"
+    }
+  ]
+}

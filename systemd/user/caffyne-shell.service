@@ -1,0 +1,18 @@
+[Unit]
+Description=Caffyne desktop shell and bar
+PartOf=graphical-session.target
+After=graphical-session.target
+
+[Service]
+Type=simple
+ExecStart=%h/.local/bin/caffyne-shell-local
+Restart=on-failure
+RestartSec=2
+# Applications launched from Caffyne inherit this unit's cgroup.  Killing the
+# whole group therefore closes those applications whenever the bar is switched
+# or restarted; stop only the shell's main process instead.
+KillMode=process
+TimeoutStopSec=5
+
+[Install]
+WantedBy=graphical-session.target

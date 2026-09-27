@@ -66,6 +66,7 @@ python3 "$SCRIPT_DIR/matugen-smart.py" "$WALLPAPER"
 if command -v wal >/dev/null 2>&1; then
     wal --theme "$COLORS_JSON" -n >/dev/null 2>&1 || true
 fi
+bash "$HOME/.config/caffyne-shell/scripts/reload-kitty.sh"
 
 python3 "$SCRIPT_DIR/rofi-wallpaper-theme.py" "$WALLPAPER" >/dev/null 2>&1 || true
 

@@ -1,0 +1,20 @@
+$1                  .CC.
+$1              .cCYYYYYYcc.
+$1          .cYYYYYc'  'cYYYYYc.
+$1      .cYYYYYc'   .CC.   'cYYYYYc.
+$1 .:cYYYYcc'   .cYYYYYYYYc.   ':cYYYYc:.
+$1cYYYY:'   .cYYYYYYYYYYYYYYYYc.   ':cYYYc
+$1YYY   .cYYYYYYYYYYYYYYYYYYYYYYYYc.   YYY
+$1YYY     'cYYYYYYYYYYYYYYYYYYYYc'
+$1YYY         'ccYYYYYYYYYYcc'
+$1YYY             ':cYYc:'
+$1YYY                ''
+$1YYY
+$1YYY
+$1YYY                                  .:c
+$1cYYYc:.                          .:cYYYc
+$1 ':cYYYYcc.                  .ccYYYYc'
+$1      'cYYYYYc.          .cYYYYYc'
+$1          'cYYYYYc.  .cYYYYYc'
+$1              'ccYYYYYYcc'
+$1                  'cc'

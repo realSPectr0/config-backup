@@ -19,6 +19,7 @@
 !gtk-4.0/**
 !hypr/
 !hypr/**
+hypr/*-card
 !kitty/
 !kitty/**
 !mpd/
@@ -53,6 +54,11 @@ mpd/state
 !xfce4/**
 !xsettingsd/
 !xsettingsd/**
+!systemd/
+!systemd/**
+systemd/user/*.wants/
+!bootstrap/
+!bootstrap/**
 
 # Allow standalone config files
 !starship.toml

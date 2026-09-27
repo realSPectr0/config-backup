@@ -1,0 +1,13 @@
+[Unit]
+Description=Startpage system stats bridge
+After=default.target
+
+[Service]
+Type=simple
+WorkingDirectory="/home/arch/.local/share/startpage"
+ExecStart="/usr/bin/python3" "/home/arch/.local/share/startpage/scripts/stats-bridge.py"
+Restart=on-failure
+RestartSec=2
+
+[Install]
+WantedBy=default.target

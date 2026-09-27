@@ -1,0 +1,437 @@
+diff --git a/bar_widgets/clock.py b/bar_widgets/clock.py
+index 536f9a2..cf2242d 100644
+--- a/bar_widgets/clock.py
++++ b/bar_widgets/clock.py
+@@ -16,8 +16,8 @@ class ClockButton(BaseButton):
+         GLib.timeout_add(1000, self._tick)
+  
+     def _get_label(self) -> str:
+-        return time.strftime("%H:%M")
++        return time.strftime("%-I:%M %p")
+  
+     def _tick(self):
+         self._update_label(self._get_label())
+-        return True
+\ No newline at end of file
++        return True
+diff --git a/bar_widgets/dock/__init__.py b/bar_widgets/dock/__init__.py
+index beda885..20655b2 100644
+--- a/bar_widgets/dock/__init__.py
++++ b/bar_widgets/dock/__init__.py
+@@ -12,7 +12,6 @@ from utils.monitors import get_connector_from_monitor_id
+ 
+ from .dock_state import DockState
+ from .dock_item import DockItem
+-from .separator import DockSeparator
+ from ..workspaces import WorkspacePill
+ 
+ 
+@@ -107,15 +106,9 @@ class Dock(EventBox):
+ 
+         groups = self._state.build_workspace_groups(windows, workspaces, self._monitor_output)
+ 
+-        first = True
+         for ws_id, items in groups.items():
+             if not items:
+                 continue
+-            if not first:
+-                sep = DockSeparator()
+-                self._workspace_box.add(sep)
+-                sep.show()
+-            first = False
+ 
+             for item_data in items:
+                 item = DockItem(
+@@ -226,4 +219,4 @@ class Dock(EventBox):
+             self._state.unpin(app_id)
+         else:
+             self._state.pin(app_id)
+-        self._rebuild()
+\ No newline at end of file
++        self._rebuild()
+diff --git a/services/templates.py b/services/templates.py
+index 58190d4..72fbf0b 100644
+--- a/services/templates.py
++++ b/services/templates.py
+@@ -97,7 +97,7 @@ class TemplateService:
+         enabled   = [t for t in templates if t.get("enabled")]
+ 
+         # Collect all IDs that caffyne will manage so we can exclude them from the merge
+-        managed_ids: set[str] = {"caffyne"}
++        managed_ids: set[str] = {"caffyne", "kitty"}
+         for t in enabled:
+             sub_templates = t.get("templates")
+             if sub_templates:
+@@ -114,6 +114,13 @@ class TemplateService:
+         lines.append(f"output_path = '{os.path.expanduser('~/.config/caffyne-shell/style/colors.css')}'")
+         lines.append("")
+ 
++        # Kitty colours — always follow the active Caffyne/Matugen palette.
++        lines.append("[templates.kitty]")
++        lines.append(f"input_path = '{os.path.expanduser('~/.config/caffyne-shell/matugen/kitty-colors.conf')}'")
++        lines.append(f"output_path = '{os.path.expanduser('~/.cache/wal/colors-kitty.conf')}'")
++        lines.append(f'post_hook = "bash {os.path.expanduser("~/.config/caffyne-shell/scripts/reload-kitty.sh")}"')
++        lines.append("")
++
+         for t in enabled:
+             folder      = t["_folder"]
+             template_id = t["id"]
+@@ -262,4 +269,4 @@ class TemplateService:
+                 logger.error(f"[TemplateService] toggle script failed for '{template_id}': {e}")
+ 
+         threading.Thread(target=run, daemon=True).start()
+-template_service = TemplateService.get_instance()
+\ No newline at end of file
++template_service = TemplateService.get_instance()
+diff --git a/services/themes.py b/services/themes.py
+index 2d8d5bf..6181c66 100644
+--- a/services/themes.py
++++ b/services/themes.py
+@@ -334,10 +334,8 @@ class ThemeService(Service):
+ 
+                 cmd = ["matugen", "json", CACHE_THEME_PATH, "-m", mode, "--opacity", str(user_options.theme.opacity)]
+ 
+-            # ensure config exists, generate if not
+-            if not os.path.isfile(MATUGEN_CONFIG_CACHE):
+-                logger.info("[ThemeService] no matugen config found, generating...")
+-                template_service.build_matugen_config()
++            # Rebuild so built-in and user-enabled templates cannot become stale.
++            template_service.build_matugen_config()
+ 
+             cmd += ["-c", MATUGEN_CONFIG_CACHE]
+ 
+@@ -350,4 +348,4 @@ class ThemeService(Service):
+         except Exception as e:
+             logger.error(f"[ThemeService] unexpected error: {e}")
+ 
+-        return GLib.SOURCE_REMOVE
+\ No newline at end of file
++        return GLib.SOURCE_REMOVE
+diff --git a/services/wm/hyprland/service.py b/services/wm/hyprland/service.py
+index f786f72..3781a71 100644
+--- a/services/wm/hyprland/service.py
++++ b/services/wm/hyprland/service.py
+@@ -45,6 +45,7 @@ class Hyprland(WMService):
+ 
+     def __init__(self, **kwargs):
+         self._keyboard_layouts = HyprlandKeyboardLayouts(self)
++        self._active_layout_display = ""
+         self._windows: dict[int, HyprlandWindow] = {}
+         self._active_window = HyprlandWindow(self)
+         self._workspaces: dict[int, HyprlandWorkspace] = {}
+@@ -184,8 +185,14 @@ class Hyprland(WMService):
+         for kb in data.get("keyboards", []):
+             if kb.get("main"):
+                 layout_names = [l.strip() for l in kb.get("layout", "").split(",") if l.strip()]
+-                active_name = kb.get("active_keymap", "")
+-                idx = next((i for i, n in enumerate(layout_names) if n == active_name), 0)
++                # `layout` contains XKB identifiers (for example `us,cn`), while
++                # `active_keymap` is a human-readable name (`English (US)`).
++                # Comparing the two makes every layout look unknown. Hyprland
++                # already exposes the authoritative index, so use it directly.
++                idx = kb.get("active_layout_index", 0)
++                if not isinstance(idx, int) or not 0 <= idx < len(layout_names):
++                    idx = 0
++                self._active_layout_display = kb.get("active_keymap", "")
+                 self._keyboard_layouts.sync({"names": layout_names, "current_idx": idx})
+                 break
+         self.notify("keyboard-layouts")
+@@ -304,13 +311,17 @@ class Hyprland(WMService):
+             self.notify("active-output")
+ 
+     def __on_active_layout(self, data: str) -> None:
+-        parts = data.split(",", 1)
+-        if len(parts) == 2:
+-            layout_name = parts[1]
+-            names = self._keyboard_layouts.names or []
+-            idx = next((i for i, n in enumerate(names) if n == layout_name), -1)
+-            self._keyboard_layouts.sync({"current_idx": idx})
+-            self.notify("keyboard-layouts")
++        # Fcitx re-announces the same layout when focus moves between
++        # workspaces. Ignore those repeats. For a genuine change, Hyprland's
++        # event can arrive just before `devices` exposes the new numeric index,
++        # so synchronize on the next main-loop tick instead of reading stale
++        # state immediately.
++        _, _, display_name = data.partition(",")
++        display_name = display_name.strip()
++        if not display_name or display_name == self._active_layout_display:
++            return
++        self._active_layout_display = display_name
++        GLib.timeout_add(75, self._sync_keyboards)
+ 
+     # -------------------------------------------------------------------------
+     # Sorting & WMService interface
+@@ -326,4 +337,4 @@ class Hyprland(WMService):
+         self.send_command(f"workspace {workspace_id}")
+ 
+     def get_workspace_by_id(self, workspace_id: int) -> HyprlandWorkspace | None:
+-        return self._workspaces.get(workspace_id)
+\ No newline at end of file
++        return self._workspaces.get(workspace_id)
+diff --git a/start.sh b/start.sh
+index be620b6..a5c40d3 100755
+--- a/start.sh
++++ b/start.sh
+@@ -5,4 +5,3 @@ source ~/.config/caffyne-shell/venv/bin/activate
+ 
+ # Run the shell
+ python3 ~/.config/caffyne-shell/main.py
+-
+diff --git a/style/colors.css b/style/colors.css
+index ebcb134..25b944c 100644
+--- a/style/colors.css
++++ b/style/colors.css
+@@ -3,64 +3,64 @@
+ * Generated with Matugen
+ */
+ 
+-@define-color background rgba(30, 30, 46, 1);
+-@define-color surface rgba(30, 30, 46, 1);
+-@define-color surface_dim rgba(24, 24, 37, 1);
+-@define-color surface_bright rgba(49, 50, 68, 1);
+-@define-color surface_variant rgba(49, 50, 68, 1);
+-@define-color surface_container rgba(49, 50, 68, 1);
+-@define-color surface_container_low rgba(30, 30, 46, 1);
+-@define-color surface_container_lowest rgba(24, 24, 37, 1);
+-@define-color surface_container_high rgba(60, 62, 81, 1);
+-@define-color surface_container_highest rgba(72, 74, 94, 1);
+-@define-color surface_tint rgba(180, 190, 254, 1);
+-@define-color inverse_surface rgba(205, 214, 244, 1);
++@define-color background rgba(20, 19, 24, 1);
++@define-color surface #141318;
++@define-color surface_dim #141318;
++@define-color surface_bright #3a383e;
++@define-color surface_variant #48454f;
++@define-color surface_container #201f25;
++@define-color surface_container_low #1c1b20;
++@define-color surface_container_lowest rgba(14, 13, 19, 1);
++@define-color surface_container_high #2b292f;
++@define-color surface_container_highest #35343a;
++@define-color surface_tint #c8bfff;
++@define-color inverse_surface #e5e1e9;
+ 
+-@define-color primary rgba(180, 190, 254, 1);
+-@define-color primary_container rgba(53, 54, 140, 1);
+-@define-color primary_fixed rgba(215, 222, 255, 1);
+-@define-color primary_fixed_dim rgba(180, 190, 254, 1);
+-@define-color inverse_primary rgba(74, 78, 172, 1);
++@define-color primary #c8bfff;
++@define-color primary_container #473f77;
++@define-color primary_fixed #e5deff;
++@define-color primary_fixed_dim #c8bfff;
++@define-color inverse_primary #5f5791;
+ 
+-@define-color on_primary #23206b;
+-@define-color on_primary_container #d7deff;
+-@define-color on_primary_fixed #0f0a40;
+-@define-color on_primary_fixed_variant #35368c;
++@define-color on_primary #30285f;
++@define-color on_primary_container #e5deff;
++@define-color on_primary_fixed #1b1149;
++@define-color on_primary_fixed_variant #473f77;
+ 
+-@define-color secondary rgba(203, 166, 247, 1);
+-@define-color secondary_container rgba(85, 27, 131, 1);
+-@define-color secondary_fixed rgba(230, 208, 255, 1);
+-@define-color secondary_fixed_dim rgba(203, 166, 247, 1);
++@define-color secondary #c9c3dc;
++@define-color secondary_container #474459;
++@define-color secondary_fixed #e5dff9;
++@define-color secondary_fixed_dim #c9c3dc;
+ 
+-@define-color on_secondary #3d0563;
+-@define-color on_secondary_container #e6d0ff;
+-@define-color on_secondary_fixed #21003b;
+-@define-color on_secondary_fixed_variant #551b83;
++@define-color on_secondary #312e41;
++@define-color on_secondary_container #e5dff9;
++@define-color on_secondary_fixed #1c192b;
++@define-color on_secondary_fixed_variant #474459;
+ 
+-@define-color tertiary rgba(116, 199, 236, 1);
+-@define-color tertiary_container rgba(0, 74, 120, 1);
+-@define-color tertiary_fixed rgba(181, 228, 251, 1);
+-@define-color tertiary_fixed_dim rgba(116, 199, 236, 1);
++@define-color tertiary #ecb8cd;
++@define-color tertiary_container #613b4d;
++@define-color tertiary_fixed #ffd8e7;
++@define-color tertiary_fixed_dim #ecb8cd;
+ 
+-@define-color on_tertiary #003259;
+-@define-color on_tertiary_container #b5e4fb;
+-@define-color on_tertiary_fixed #001934;
+-@define-color on_tertiary_fixed_variant #004a78;
++@define-color on_tertiary #482536;
++@define-color on_tertiary_container #ffd8e7;
++@define-color on_tertiary_fixed #301121;
++@define-color on_tertiary_fixed_variant #613b4d;
+ 
+-@define-color error rgba(243, 139, 168, 1);
+-@define-color error_container rgba(119, 0, 53, 1);
++@define-color error #ffb4ab;
++@define-color error_container #93000a;
+ 
+-@define-color on_error #580022;
+-@define-color on_error_container #ffc1d1;
++@define-color on_error #690005;
++@define-color on_error_container #ffdad6;
+ 
+-@define-color on_background #b1b8d4;
+-@define-color on_surface #cdd6f4;
+-@define-color on_surface_variant #959bb5;
+-@define-color inverse_on_surface #1e1e2e;
++@define-color on_background #e5e1e9;
++@define-color on_surface #e5e1e9;
++@define-color on_surface_variant #c9c5d0;
++@define-color inverse_on_surface #313036;
+ 
+-@define-color outline rgba(122, 127, 151, 1);
+-@define-color outline_variant rgba(49, 50, 68, 1);
++@define-color outline #928f99;
++@define-color outline_variant rgba(72, 69, 79, 1);
+ 
+-@define-color scrim rgba(0, 0, 0, 1);
+-@define-color shadow rgba(0, 0, 0, 1);
+-@define-color source_color rgba(180, 190, 254, 1);
+\ No newline at end of file
++@define-color scrim #000000;
++@define-color shadow #000000;
++@define-color source_color #554d88;
+diff --git a/style/workspaces.css b/style/workspaces.css
+index 7c0476f..1343af3 100644
+--- a/style/workspaces.css
++++ b/style/workspaces.css
+@@ -1,15 +1,37 @@
+-.workspace {
+-    background-color: var(--surface_container);
+-    border-radius: apply(radius-m);
+-    /* margin: 0px 2px; */
+-    padding: 7px 7px;
+-    border: 1px solid;
+-    border-color: var(--surface_container_highest);
+-    transition: all 0.3s ease;
++/* Icon workspaces: a compact, dark capsule inspired by an app switcher. */
++.workspace-button-container {
++    background-color: transparent;
++    border: 0;
++    padding: 0;
++    box-shadow: none;
++}
++
++.workspace-button-container .workspace {
++    background-color: transparent;
++    border: 0;
++    border-radius: 999px;
++    padding: 2px;
++    transition: background-color 180ms ease;
++}
++
++.workspace-button-container .workspace:hover {
++    background-color: alpha(var(--on_surface), 0.08);
++}
++
++.workspace-button-container .workspace .icon {
++    background-color: var(--surface_container_high);
++    border: 1px solid alpha(var(--outline), 0.42);
++    border-radius: 999px;
++    padding: 5px;
++    min-width: 20px;
++    min-height: 20px;
++    transition: all 180ms ease;
+ }
+ 
+-.workspace.active {
+-    border-color: var(--primary);
++.workspace-button-container .workspace.active .icon {
++    background-color: var(--surface_container_highest);
++    border-color: alpha(var(--primary), 0.72);
++    box-shadow: 0 0 0 1px alpha(var(--primary), 0.14);
+ }
+ 
+ .workspace-dots-container {
+diff --git a/utils/dispatch.py b/utils/dispatch.py
+index 2f7c863..6d4a04b 100644
+--- a/utils/dispatch.py
++++ b/utils/dispatch.py
+@@ -1,20 +1,15 @@
+-import os
+-from fabric.utils import exec_shell_command_async, DesktopApp
+-import re
++from fabric.utils import DesktopApp
+ 
+-def clean_cmd(cmd: str) -> str:
+-    return re.sub(r'%\w', '', cmd).strip()
+ 
+ def dispatch_app(app: DesktopApp) -> bool:
+-    cmd = clean_cmd(app.command_line)
+-    if os.getenv("NIRI_SOCKET"):
+-        exec_shell_command_async(f"niri msg action spawn -- {cmd}")
+-    elif os.getenv("HYPRLAND_INSTANCE_SIGNATURE"):
+-        exec_shell_command_async(
+-            f'hyprctl dispatch \'hl.dsp.exec_cmd("{cmd}")\''
+-        )
+-    elif os.getenv("MANGO_INSTANCE_SIGNATURE"):
+-        exec_shell_command_async(f"mmsg dispatch spawn, {cmd}")
+-    else:
++    """Launch an application using its desktop entry.
++
++    Gio handles desktop-entry field codes, quoting, startup notification, and
++    the process environment.  In particular, this avoids relying on optional
++    compositor dispatchers such as Hyprland's old ``hl.dsp.exec_cmd`` plugin.
++    """
++    try:
++        return bool(app.launch())
++    except Exception as error:
++        print(f"Failed to launch {app.display_name or app.name}: {error}")
+         return False
+-    return True
+\ No newline at end of file
+diff --git a/windows/clock.py b/windows/clock.py
+index 0cd9a3b..76ee0b3 100644
+--- a/windows/clock.py
++++ b/windows/clock.py
+@@ -151,7 +151,7 @@ class WorldClockRow(Box):
+         self._update()
+     def _update(self):
+         now = datetime.datetime.now(self._tz)
+-        self._time_label.set_label(now.strftime("%H:%M"))
++        self._time_label.set_label(now.strftime("%-I:%M %p"))
+ 
+     def set_timezone(self, timezone: str):
+         self._timezone = timezone
+@@ -521,7 +521,7 @@ class ClockApplet(Applet):
+ 
+     def _update_time(self):
+         now = datetime.datetime.now()
+-        self.clock_label.set_label(now.strftime("%H\n%M"))
++        self.clock_label.set_label(now.strftime("%-I\n%M %p"))
+         self.clock_progress.value = int(now.strftime("%S"))
+         self.title_label.set_label(now.strftime("%B %-d"))
+         return True
+diff --git a/windows/osd.py b/windows/osd.py
+index 608c589..4238b26 100644
+--- a/windows/osd.py
++++ b/windows/osd.py
+@@ -321,6 +321,7 @@ class OSD(WaylandWindow):
+             self._bind_speaker(audio.speaker)
+         audio.connect("speaker-changed", self._on_speaker_changed)
+         brightness.connect("screen", self._on_brightness_changed)
++        self._last_layout_name = wm.keyboard_layouts.current_name or ""
+         wm.keyboard_layouts.connect("notify::current-name", self._on_layout)
+         timer.connect("alarm-triggered-signal", self._on_alarm_triggered)
+         if battery.available:
+@@ -394,7 +395,13 @@ class OSD(WaylandWindow):
+             brightness.screen_brightness = min_brightness
+             
+     def _on_layout(self, obj, _):
+-        self.layout_icon.set_label(obj.current_name)
++        layout_name = obj.current_name or ""
++        # Hyprland/Fcitx can re-emit activelayout when focus moves between
++        # workspaces even though the user's keyboard layout did not change.
++        if not layout_name or layout_name == self._last_layout_name:
++            return
++        self._last_layout_name = layout_name
++        self.layout_icon.set_label(layout_name)
+         self._show_only(self.layout_icon)
+ 
+     def _reset_timer(self):

@@ -197,7 +197,17 @@ aur_install() {
     else
         flags+=(--answerdiff None --answerclean None --answeredit None --removemake)
     fi
-    "$aur_helper" "${flags[@]}" "$@"
+    # ninja/meson ignore MAKEFLAGS but size their job count from the CPUs
+    # they can see, so pin the build to as many CPUs as we want jobs.
+    local cpus="${CMAKE_BUILD_PARALLEL_LEVEL:-$(nproc)}"
+    (( cpus > $(nproc) )) && cpus="$(nproc)"
+    taskset -c "0-$(( cpus - 1 ))" "$aur_helper" "${flags[@]}" "$@"
+}
+
+# True if the package, or the repo version a -git package replaces (e.g.
+# quickshell for quickshell-git, often pulled in as a dependency), is installed.
+already_provided() {
+    pacman -Qq "$1" >/dev/null 2>&1 || pacman -Qq "${1%-git}" >/dev/null 2>&1
 }
 
 # Parallel C++ builds (quickshell's precompiled headers especially) need ~3 GB
@@ -223,6 +233,7 @@ install_aur_packages() {
     log "Installing desktop-critical AUR packages"
     local pkg
     for pkg in "${aur_core[@]}"; do
+        already_provided "$pkg" && continue
         aur_install "$pkg" || failed+=("$pkg (CORE)")
     done
 
@@ -233,7 +244,7 @@ install_aur_packages() {
     while IFS= read -r pkg; do
         [[ -z "$pkg" ]] && continue
         [[ " ${aur_core[*]} " == *" $pkg "* ]] && continue
-        pacman -Qq "$pkg" >/dev/null 2>&1 && continue
+        already_provided "$pkg" && continue
         aur_install "$pkg" || failed+=("$pkg")
     done < <(read_list "$pkgdir/aur.txt"; cat "$missing_file" 2>/dev/null; hardware_packages | grep -x supergfxctl || true)
     rm -f "$missing_file"

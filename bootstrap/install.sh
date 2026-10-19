@@ -198,8 +198,24 @@ aur_install() {
     "$aur_helper" "${flags[@]}" "$@"
 }
 
+# Parallel C++ builds (quickshell's precompiled headers especially) need ~3 GB
+# per job; one job per core runs a 16 GB laptop out of memory.
+limit_build_jobs() {
+    local mem_kb cg jobs cores
+    mem_kb="$(awk '/^MemTotal:/{print $2}' /proc/meminfo)"
+    cg="$(cat /sys/fs/cgroup/memory.max 2>/dev/null || echo max)"
+    [[ "$cg" =~ ^[0-9]+$ ]] && (( cg / 1024 < mem_kb )) && mem_kb=$(( cg / 1024 ))
+    cores="$(nproc)"
+    jobs=$(( mem_kb / (3 * 1024 * 1024) ))
+    (( jobs > cores )) && jobs=$cores
+    (( jobs < 1 )) && jobs=1
+    export MAKEFLAGS="-j$jobs" CMAKE_BUILD_PARALLEL_LEVEL="$jobs"
+    echo "  building with $jobs parallel jobs"
+}
+
 install_aur_packages() {
     ensure_aur_helper
+    limit_build_jobs
 
     log "Installing desktop-critical AUR packages"
     local pkg

@@ -10,6 +10,8 @@
 #   --skip-packages   restore files/services only, install nothing
 #   --no-system       skip everything that needs sudo (packages, /etc, services)
 #   -y, --yes         don't ask for confirmation before starting
+#
+# BUILD_JOBS=N overrides the parallel AUR build jobs (default: ~3 GB RAM each).
 set -euo pipefail
 
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -35,7 +37,7 @@ for arg in "$@"; do
         --skip-packages) skip_packages=1 ;;
         --no-system) no_system=1; skip_packages=1 ;;
         -y|--yes) assume_yes=1 ;;
-        -h|--help) sed -n '2,14p' "$0"; exit 0 ;;
+        -h|--help) sed -n '2,16p' "$0"; exit 0 ;;
         *) echo "Unknown option: $arg" >&2; exit 1 ;;
     esac
 done
@@ -202,13 +204,14 @@ aur_install() {
 # per job; one job per core runs a 16 GB laptop out of memory.
 limit_build_jobs() {
     local mem_kb cg jobs cores
-    mem_kb="$(awk '/^MemTotal:/{print $2}' /proc/meminfo)"
+    mem_kb="$(awk '/^MemAvailable:/{print $2}' /proc/meminfo)"
     cg="$(cat /sys/fs/cgroup/memory.max 2>/dev/null || echo max)"
     [[ "$cg" =~ ^[0-9]+$ ]] && (( cg / 1024 < mem_kb )) && mem_kb=$(( cg / 1024 ))
     cores="$(nproc)"
     jobs=$(( mem_kb / (3 * 1024 * 1024) ))
     (( jobs > cores )) && jobs=$cores
     (( jobs < 1 )) && jobs=1
+    jobs="${BUILD_JOBS:-$jobs}"
     export MAKEFLAGS="-j$jobs" CMAKE_BUILD_PARALLEL_LEVEL="$jobs"
     echo "  building with $jobs parallel jobs"
 }

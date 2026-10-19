@@ -144,7 +144,10 @@ hardware_packages() {
 install_native_packages() {
     enable_multilib
     log "Syncing package databases and upgrading"
-    sudo pacman -Syu --noconfirm
+    # An install from an older ISO can have a stale keyring, which makes every
+    # newer package fail with "signature ... is unknown trust".
+    sudo pacman -Sy --noconfirm --needed archlinux-keyring
+    sudo pacman -Su --noconfirm
 
     # Only ask pacman for packages the repos actually have, so one renamed or
     # dropped package doesn't abort the whole transaction.
@@ -525,6 +528,7 @@ main() {
     (( no_system )) || configure_system
     configure_user_session
     summary
+    (( ${#failed[@]} == 0 ))
 }
 
 main "$@"

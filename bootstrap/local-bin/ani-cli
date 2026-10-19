@@ -1,0 +1,11 @@
+#!/bin/sh
+# ani-cli wrapper — applies custom rofi theme matching waybar switcher
+
+_TMP=$(mktemp -d)
+cat > "$_TMP/rofi" << 'EOF'
+#!/bin/sh
+exec /usr/bin/rofi "$@" -theme /home/arch/.config/rofi/ani-cli.rasi
+EOF
+chmod +x "$_TMP/rofi"
+PATH="$_TMP:$PATH" exec /usr/bin/ani-cli "$@"
+rm -rf "$_TMP" 2>/dev/null || true

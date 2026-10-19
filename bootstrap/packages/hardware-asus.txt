@@ -1,0 +1,2 @@
+asusctl
+supergfxctl

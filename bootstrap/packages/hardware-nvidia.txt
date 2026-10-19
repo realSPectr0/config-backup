@@ -1,0 +1,5 @@
+cuda
+libva-nvidia-driver
+nvidia-open-dkms
+nvidia-prime
+nvidia-settings

@@ -1,0 +1,10 @@
+[Unit]
+Description=Close Discord/Zen when RAM usage exceeds 14.8 GiB
+After=graphical-session.target
+
+[Service]
+ExecStart=%h/.local/bin/memguard
+Restart=on-failure
+
+[Install]
+WantedBy=default.target

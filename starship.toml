@@ -1,3 +1,5 @@
+scan_timeout = 100
+
 format = """
 [  ](bg:none fg:#e3e5e5)\
 $directory\

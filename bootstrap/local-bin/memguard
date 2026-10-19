@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+# memguard: when used RAM goes above a threshold, close apps in priority order.
+# Used = MemTotal - MemAvailable (same as "used" in btop/free, ignoring cache).
+
+THRESHOLD_MB=${MEMGUARD_THRESHOLD_MB:-15155}   # 14.8 GiB (MiB units)
+INTERVAL=${MEMGUARD_INTERVAL:-5}               # seconds between checks
+COOLDOWN=${MEMGUARD_COOLDOWN:-20}              # wait after closing something
+
+# Closed in this order, one per trigger: "label:pgrep -f pattern"
+TARGETS=(
+  "Discord:/discord/app-[^/]+/Discord"
+  "Zen:/opt/zen-browser-bin/zen-bin"
+)
+
+used_mb() {
+  awk '/^MemTotal:/{t=$2} /^MemAvailable:/{a=$2} END{print int((t-a)/1024)}' /proc/meminfo
+}
+
+close_app() {
+  local label=$1 pattern=$2
+  # Only the top-level process; children (renderers etc.) exit with it
+  local pids
+  pids=$(pgrep -u "$USER" -f "$pattern" | while read -r p; do
+    ppat=$(ps -o args= -p "$(ps -o ppid= -p "$p" | tr -d ' ')" 2>/dev/null)
+    [[ $ppat =~ $pattern ]] || echo "$p"
+  done)
+  [[ -z $pids ]] && return 1
+  kill -TERM $pids
+  sleep 5
+  pgrep -u "$USER" -f "$pattern" >/dev/null && pkill -KILL -u "$USER" -f "$pattern"
+  notify-send -u critical "memguard" "RAM above $(awk "BEGIN{printf \"%.1f\", $THRESHOLD_MB/1024}") GiB — closed $label" 2>/dev/null
+  echo "$(date '+%F %T') used=$(used_mb)MB closed $label"
+  return 0
+}
+
+echo "memguard: threshold ${THRESHOLD_MB}MB, interval ${INTERVAL}s"
+while true; do
+  if (( $(used_mb) > THRESHOLD_MB )); then
+    for t in "${TARGETS[@]}"; do
+      if close_app "${t%%:*}" "${t#*:}"; then
+        sleep "$COOLDOWN"
+        break
+      fi
+    done
+  fi
+  sleep "$INTERVAL"
+done

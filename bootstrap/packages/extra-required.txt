@@ -1,0 +1,24 @@
+# Packages the configs/scripts rely on that are only installed as dependencies
+# on the source machine (so they don't show up in pacman-native.txt).
+git
+base-devel
+python
+python-gobject
+python-psutil
+python-dbus
+qt6-multimedia
+qt6-5compat
+qt6-svg
+qt6-virtualkeyboard
+gst-plugins-good
+playerctl
+wl-clipboard
+libnotify
+xdg-user-dirs
+gnome-keyring
+jq
+bc
+upower
+lm_sensors
+networkmanager
+pciutils

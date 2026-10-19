@@ -75,3 +75,6 @@ __pycache__/
 # Runtime state can reveal local file and wallpaper paths
 session/
 rofi/wallpaper-colors.rasi
+
+# Editor/backup leftovers
+*.bak

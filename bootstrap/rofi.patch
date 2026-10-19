@@ -1,0 +1,74 @@
+diff --git a/files/launchers/type-6/launcher.sh b/files/launchers/type-6/launcher.sh
+index c0b4d33..bf9b322 100755
+--- a/files/launchers/type-6/launcher.sh
++++ b/files/launchers/type-6/launcher.sh
+@@ -10,10 +10,15 @@
+ ## style-1     style-2     style-3     style-4     style-5
+ ## style-6     style-7     style-8     style-9     style-10
+ 
+-dir="$HOME/.config/rofi/launchers/type-6"
+-theme='style-1'
++dir="$HOME/rofi/files/launchers/type-6"
++theme='style-6'
++theme_sync="$HOME/.config/hypr/scripts/rofi-wallpaper-theme.py"
++
++if [ -x "$theme_sync" ]; then
++  python3 "$theme_sync" >/dev/null 2>&1 || true
++fi
+ 
+ ## Run
+ rofi \
+-    -show drun \
+-    -theme ${dir}/${theme}.rasi
++  -show drun \
++  -theme ${dir}/${theme}.rasi
+diff --git a/files/launchers/type-6/style-6.rasi b/files/launchers/type-6/style-6.rasi
+index 7056c85..bc69005 100644
+--- a/files/launchers/type-6/style-6.rasi
++++ b/files/launchers/type-6/style-6.rasi
+@@ -8,6 +8,8 @@
+  **/
+ 
+ /*****----- Configuration -----*****/
++@import "/home/arch/.config/rofi/wallpaper-colors.rasi"
++
+ configuration {
+ 	modi:                       "drun,run,filebrowser,window";
+     show-icons:                 true;
+@@ -22,12 +24,12 @@ configuration {
+ /*****----- Global Properties -----*****/
+ * {
+     font:                        "JetBrains Mono Nerd Font 10";
+-    background:                  #D0D0D0;
+-    background-alt:              #E9E9E9;
+-    foreground:                  #161616;
+-    selected:                    #BEBEBE;
+-    active:                      #999999;
+-    urgent:                      #808080;
++    background:                  @rofi-bg;
++    background-alt:              @rofi-bg-alt;
++    foreground:                  @rofi-fg;
++    selected:                    @rofi-selected-strong;
++    active:                      @rofi-active;
++    urgent:                      @rofi-urgent;
+ }
+ 
+ /*****----- Main Window -----*****/
+@@ -43,6 +45,8 @@ window {
+ 
+     /* properties for all widgets */
+     enabled:                     true;
++    border:                      2px;
++    border-color:                @rofi-border;
+     border-radius:               15px;
+     cursor:                      "default";
+     background-color:            @background;
+@@ -60,7 +64,7 @@ mainbox {
+ imagebox {
+     padding:                     20px;
+     background-color:            transparent;
+-    background-image:            url("~/.config/rofi/images/f.png", height);
++    background-image:            @rofi-wallpaper-image;
+     orientation:                 vertical;
+     children:                    [ "inputbar", "dummy", "mode-switcher" ];
+ }

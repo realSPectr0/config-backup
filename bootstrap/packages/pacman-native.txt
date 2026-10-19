@@ -22,19 +22,17 @@ cli11
 cliphist
 cmatrix
 cowsay
-cuda
 cups
 dgop
 discord
 dkms
 dms-shell
-dms-shell-hyprland
-dms-shell-niri
 docker
 docker-compose
 dolphin
 dunst
 efibootmgr
+espeak-ng
 eza
 fastfetch
 fcitx5
@@ -79,7 +77,6 @@ hyprshot
 imagemagick
 impacket
 inotify-tools
-intel-ucode
 iwd
 jdk-openjdk
 jdk21-openjdk
@@ -94,7 +91,6 @@ lf
 libpulse
 libreoffice-fresh
 libresprite
-libva-nvidia-driver
 linux
 linux-firmware
 linux-headers
@@ -121,9 +117,6 @@ noto-fonts
 noto-fonts-cjk
 noto-fonts-emoji
 npm
-nvidia-open-dkms
-nvidia-prime
-nvidia-settings
 nvm
 nvtop
 nwg-dock-hyprland
@@ -143,7 +136,6 @@ pipewire
 pipewire-alsa
 pipewire-jack
 pipewire-pulse
-plasma-x11-session
 polkit-gnome
 polkit-kde-agent
 power-profiles-daemon
@@ -151,7 +143,6 @@ print-manager
 prismlauncher
 proton-vpn-gtk-app
 python-pip
-python-pywal
 python-websockets
 qt5-graphicaleffects
 qt5-quickcontrols2

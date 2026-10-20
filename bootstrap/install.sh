@@ -489,9 +489,8 @@ configure_system() {
     log "Adding $USER to groups"
     local group
     for group in docker wireshark vboxusers video input; do
-        getent group "$group" >/dev/null && sudo usermod -aG "$group" "$USER"
+        getent group "$group" >/dev/null && sudo usermod -aG "$group" "$USER" || true
     done
-    return 0
 
     if [[ "$(getent passwd "$USER" | cut -d: -f7)" != */zsh ]] && have zsh; then
         log "Setting zsh as login shell"

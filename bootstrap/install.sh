@@ -190,7 +190,24 @@ ensure_aur_helper() {
     aur_helper=yay
 }
 
+# Some AUR packages (python-pywal, wlogout) verify upstream PGP signatures.
+# gpg's own keyserver fetching (dirmngr) fails on many networks with "Server
+# indicated a failure", so fetch the keys the PKGBUILD lists over plain HTTPS.
+import_pgp_keys() {
+    local pkg key
+    for pkg in "$@"; do
+        while IFS= read -r key; do
+            gpg --list-keys "$key" >/dev/null 2>&1 && continue
+            curl -fsSL "https://keyserver.ubuntu.com/pks/lookup?op=get&options=mr&search=0x$key" \
+                | gpg --batch --import >/dev/null 2>&1 \
+                || warn "could not import PGP key $key for $pkg"
+        done < <(curl -fsSL "https://aur.archlinux.org/cgit/aur.git/plain/.SRCINFO?h=$pkg" 2>/dev/null \
+            | awk '$1 == "validpgpkeys" {print $3}')
+    done
+}
+
 aur_install() {
+    import_pgp_keys "$@"
     local flags=(-S --needed --noconfirm)
     if [[ "$aur_helper" == paru ]]; then
         flags+=(--skipreview)
@@ -230,12 +247,7 @@ install_aur_packages() {
     ensure_aur_helper
     limit_build_jobs
 
-    # Some AUR packages (python-pywal, wlogout) verify upstream PGP signatures.
-    # gpg's default keyserver often fails to return those keys; use Ubuntu's.
-    mkdir -p "$HOME/.gnupg"
-    chmod 700 "$HOME/.gnupg"
-    grep -qs '^keyserver ' "$HOME/.gnupg/gpg.conf" \
-        || echo 'keyserver hkps://keyserver.ubuntu.com' >> "$HOME/.gnupg/gpg.conf"
+
 
     log "Installing desktop-critical AUR packages"
     local pkg
@@ -344,11 +356,15 @@ clone_and_patch() {
                 || warn "base commit for $dst not found; patching upstream HEAD"
         fi
     fi
-    if [[ -s "$patch" ]]; then
+    # The marker matters on reruns: fix_home_paths edits patched files, after
+    # which neither apply --check nor --reverse --check matches any more.
+    local marker="$dst/.git/restore-patched"
+    if [[ -s "$patch" && ! -e "$marker" ]]; then
         if git -C "$dst" apply --check "$patch" 2>/dev/null; then
             git -C "$dst" apply --whitespace=nowarn "$patch"
+            touch "$marker"
         elif git -C "$dst" apply --reverse --check "$patch" 2>/dev/null; then
-            : # already applied
+            touch "$marker" # already applied
         else
             warn "$(basename "$patch") did not apply cleanly to $dst"
             failed+=("$(basename "$patch")")

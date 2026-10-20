@@ -1,0 +1,165 @@
+{
+  "user": {
+    "avatar": "/var/lib/AccountsService/icons/arch"
+  },
+  "settings": {
+    "dnd": true
+  },
+  "bars": {
+    "configs": [
+      {
+        "monitor": 1,
+        "bars": [
+          {
+            "alignment": "bottom",
+            "floating_bar": false,
+            "floating_applets": true,
+            "rounded_edges": true,
+            "min_width": false,
+            "auto_hide": false,
+            "left": [
+              "Dash",
+              {
+                "type": "group",
+                "widgets": [
+                  "Calendar",
+                  "Weather"
+                ]
+              },
+              "Media",
+              "Energy"
+            ],
+            "center": [
+              "Dock"
+            ],
+            "right": [
+              "Processes",
+              "Settings",
+              "Clock",
+              "Notifications",
+              "Session"
+            ]
+          }
+        ],
+        "floating_bar": false
+      }
+    ]
+  },
+  "timeouts": {
+    "list": [
+      {
+        "name": "screen-off",
+        "timeout_ac": 30,
+        "timeout_bat": 13,
+        "enabled": true
+      },
+      {
+        "name": "lock",
+        "timeout_ac": 30,
+        "timeout_bat": 12,
+        "enabled": true
+      },
+      {
+        "name": "suspend",
+        "timeout_ac": 40,
+        "timeout_bat": 15,
+        "enabled": true
+      }
+    ]
+  },
+  "theme": {
+    "light_theme": "catppuccin-latte",
+    "dark_theme": "Matugen",
+    "active_accent": "accent4",
+    "is_dark": true,
+    "scheme_type": "scheme-tonal-spot",
+    "opacity": 1.0,
+    "blur": true,
+    "border_style": "medium",
+    "font_monospace_style": "none"
+  },
+  "launcher": {
+    "grid": false
+  },
+  "dock": {
+    "entries": []
+  },
+  "world_clocks": {
+    "clocks": [
+      "Asia/Taipei",
+      "Europe/Paris"
+    ]
+  },
+  "wallpaper": {
+    "path": "/home/arch/.config/caffyne-shell/wallpapers/wall21.jpg"
+  },
+  "templates": {
+    "enabled": []
+  },
+  "desktop_applets": {
+    "applets": [
+      {
+        "key": "Media",
+        "slot": 8
+      },
+      {
+        "key": "Weather",
+        "slot": 16
+      },
+      {
+        "key": "Processes",
+        "slot": 5
+      },
+      {
+        "key": "Clock",
+        "slot": 1
+      },
+      {
+        "key": "Calendar",
+        "slot": 0
+      },
+      {
+        "key": "Energy",
+        "slot": 2
+      }
+    ]
+  },
+  "desktop_canvas": {
+    "placements": {
+      "0": [
+        {
+          "key": "Clock",
+          "grid_x": 0,
+          "grid_y": 0,
+          "ax": "left",
+          "dx": 0,
+          "ry": 0.0
+        },
+        {
+          "key": "Media",
+          "grid_x": 16,
+          "grid_y": 9,
+          "ax": "right",
+          "dx": 0,
+          "ry": 0.8
+        },
+        {
+          "key": "Processes",
+          "grid_x": 0,
+          "grid_y": 2,
+          "ax": "left",
+          "dx": 0,
+          "ry": 0.2
+        },
+        {
+          "key": "Weather",
+          "grid_x": 16,
+          "grid_y": 6,
+          "ax": "right",
+          "dx": 0,
+          "ry": 0.5555555555555556
+        }
+      ]
+    }
+  }
+}

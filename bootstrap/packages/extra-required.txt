@@ -22,3 +22,19 @@ upower
 lm_sensors
 networkmanager
 pciutils
+# caffyne-shell runtime (from its install.sh; the source machine had some of
+# these unpacked by hand under ~/.local/share/caffyne-shell/root instead)
+gtk3
+cairo
+libgirepository
+gobject-introspection
+gtk-layer-shell
+libdbusmenu-gtk3
+cinnamon-desktop
+gnome-bluetooth-3.0
+gtk-session-lock
+swayidle
+wf-recorder
+python-pip
+bluez
+pkgconf

@@ -501,9 +501,16 @@ configure_system() {
 configure_user_session() {
     log "Generating initial colour scheme and theme settings"
     # Many configs import ~/.cache/wal/*; seed it from the first wallpaper so
-    # the first login isn't unstyled. Super+W picks a different wallpaper.
-    local wall
-    wall="$(find "$HOME/Pictures/Wallpapers" -type f \( -iname '*.png' -o -iname '*.jpg' -o -iname '*.jpeg' \) | sort | head -n1)"
+    # the first login isn't unstyled; prefer the wallpaper that was on screen
+    # when the snapshot was taken.
+    local wall saved
+    saved="$(find "$boot" -maxdepth 1 -name 'current-wallpaper.*' | head -n1)"
+    if [[ -n "$saved" ]]; then
+        wall="$HOME/Pictures/Wallpapers/$(basename "$saved")"
+        cp -a "$saved" "$wall"
+    else
+        wall="$(find "$HOME/Pictures/Wallpapers" -type f \( -iname '*.png' -o -iname '*.jpg' -o -iname '*.jpeg' \) | sort | head -n1)"
+    fi
     if [[ -n "$wall" ]]; then
         mkdir -p "$HOME/.cache/wallpaper-colors"
         echo "$wall" > "$HOME/.cache/wallpaper-colors/current"

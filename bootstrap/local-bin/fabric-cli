@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+PYTHON="${XDG_CONFIG_HOME:-$HOME/.config}/caffyne-shell/venv/bin/python"
+
+if [[ ! -x "$PYTHON" ]]; then
+    echo "Caffyne's Fabric environment is missing: $PYTHON" >&2
+    exit 1
+fi
+
+# Caffyne's documentation still uses the older `exec` spelling. Current
+# Fabric exposes the same command as `execute`.
+if [[ "${1:-}" == "exec" ]]; then
+    shift
+    exec "$PYTHON" -m fabric execute "$@"
+fi
+
+exec "$PYTHON" -m fabric "$@"

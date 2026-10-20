@@ -29,7 +29,7 @@ log "Home dotfiles (secrets are NOT copied; see README)"
 cp -a "$HOME/.bashrc" "$HOME/.bash_profile" "$HOME/.gtkrc-2.0" "$boot/home-dotfiles/" 2>/dev/null || true
 
 log "~/.local/bin helpers"
-for f in caffyne-control caffyne-fastfetch memguard ani-cli; do
+for f in caffyne-control caffyne-fastfetch fabric-cli memguard ani-cli; do
     [[ -f "$HOME/.local/bin/$f" ]] && cp -a "$HOME/.local/bin/$f" "$boot/local-bin/"
 done
 
@@ -50,6 +50,18 @@ if [[ -d "$caffyne/.git" ]]; then
     mkdir -p "$boot/caffyne-shell-overlay"
     git -C "$caffyne" ls-files --others --exclude-standard -z \
         | (cd "$caffyne" && xargs -0 -r cp --parents -a -t "$boot/caffyne-shell-overlay")
+    # User settings (bar layout, wallpaper, theme) are git-ignored upstream.
+    for f in config/config.json config/dock_state.json; do
+        [[ -f "$caffyne/$f" ]] && (cd "$caffyne" && cp --parents -a "$f" "$boot/caffyne-shell-overlay/")
+    done
+fi
+
+log "Current wallpaper"
+rm -f "$boot"/current-wallpaper.*
+wall="$(awww query 2>/dev/null | sed -n 's/.*image: //p' | head -n1)"
+[[ -z "$wall" ]] && wall="$(cat "$HOME/.cache/wallpaper-colors/current" 2>/dev/null || true)"
+if [[ -f "$wall" ]]; then
+    cp -a "$wall" "$boot/current-wallpaper.${wall##*.}"
 fi
 
 log "rofi (adi1090x) patch"

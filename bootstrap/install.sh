@@ -230,6 +230,13 @@ install_aur_packages() {
     ensure_aur_helper
     limit_build_jobs
 
+    # Some AUR packages (python-pywal, wlogout) verify upstream PGP signatures.
+    # gpg's default keyserver often fails to return those keys; use Ubuntu's.
+    mkdir -p "$HOME/.gnupg"
+    chmod 700 "$HOME/.gnupg"
+    grep -qs '^keyserver ' "$HOME/.gnupg/gpg.conf" \
+        || echo 'keyserver hkps://keyserver.ubuntu.com' >> "$HOME/.gnupg/gpg.conf"
+
     log "Installing desktop-critical AUR packages"
     local pkg
     for pkg in "${aur_core[@]}"; do

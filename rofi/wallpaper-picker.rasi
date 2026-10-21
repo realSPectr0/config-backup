@@ -1,104 +1,121 @@
 /**
  * Wallpaper picker rofi theme
- * Matches ani-cli / waybar switcher aesthetic
+ * One row of cards (16:9 preview + filename), filter bar with folder tabs.
+ * Colours come from wallpaper-colors.rasi (regenerated per wallpaper).
  **/
 
 @import "/home/arch/.config/rofi/wallpaper-colors.rasi"
 
 * {
-    background:     @rofi-bg;
-    background-alt: @rofi-bg-alt;
-    foreground:     @rofi-fg;
-    selected-bg:    @rofi-selected-bg;
-    selected-fg:    @rofi-accent;
-    border-col:     @rofi-border;
-    font:           "JetBrainsMono Nerd Font Propo Bold 11";
+    font:               "JetBrainsMono Nerd Font Propo 10";
+    text-color:         @rofi-fg;
+    background-color:   transparent;
+    card-bg:            rgba(255, 255, 255, 0.05);
 }
 
 window {
     transparency:       "real";
     location:           center;
     anchor:             center;
-    x-offset:           0px;
-    y-offset:           0px;
-    width:              748px;
-    border-radius:      20px;
-    border:             0px;
-    background-color:   @background;
-    padding:            8px;
+    width:              1180px;
+    border-radius:      22px;
+    border:             2px;
+    border-color:       rgba(255, 255, 255, 0.12);
+    background-color:   @rofi-bg-glass;
+    padding:            18px;
 }
 
 mainbox {
-    spacing:            0px;
-    background-color:   transparent;
+    spacing:            18px;
     children:           [ "inputbar", "listview" ];
 }
 
 inputbar {
-    enabled:            true;
-    spacing:            6px;
-    padding:            10px 14px;
-    margin:             0px 0px 8px 0px;
-    border-radius:      14px;
-    background-color:   @background-alt;
-    text-color:         @foreground;
-    children:           [ "prompt", "entry" ];
+    spacing:            10px;
+    padding:            8px 8px 8px 16px;
+    border-radius:      12px;
+    background-color:   @card-bg;
+    children:           [ "textbox-prompt", "entry", "mode-switcher" ];
 }
 
-prompt {
-    enabled:            true;
-    background-color:   transparent;
-    text-color:         @selected-fg;
+textbox-prompt {
+    expand:             false;
+    str:                "Select Wallpaper";
+    text-color:         @rofi-accent;
+    vertical-align:     0.5;
 }
 
 entry {
-    enabled:            true;
-    background-color:   transparent;
-    text-color:         @foreground;
-    placeholder:        "pick wallpaper...";
+    placeholder:        "Type to filter...";
     placeholder-color:  @rofi-muted;
     cursor:             text;
+    vertical-align:     0.5;
+}
+
+mode-switcher {
+    expand:             false;
+    spacing:            4px;
+}
+
+button {
+    padding:            4px 12px;
+    border-radius:      8px;
+    text-color:         @rofi-muted;
+    cursor:             pointer;
+}
+
+button selected {
+    background-color:   @rofi-selected-bg;
+    text-color:         @rofi-accent;
 }
 
 listview {
-    enabled:            true;
-    columns:            3;
-    lines:              2;
-    cycle:              true;
-    dynamic:            true;
-    scrollbar:          false;
+    columns:            5;
+    lines:              1;
+    flow:               horizontal;
+    cycle:              false;
+    dynamic:            false;
     fixed-columns:      true;
     fixed-height:       true;
-    spacing:            8px;
-    background-color:   transparent;
+    scrollbar:          false;
+    spacing:            14px;
 }
 
 element {
-    enabled:            true;
-    padding:            0px;
-    border-radius:      12px;
-    background-color:   transparent;
-    text-color:         @foreground;
-    cursor:             pointer;
     orientation:        vertical;
-    spacing:            6px;
-}
-
-element selected.normal {
-    background-color:   @selected-bg;
-    text-color:         @selected-fg;
+    padding:            10px 10px 12px 10px;
+    spacing:            0px;
+    border-radius:      12px;
+    background-color:   @card-bg;
+    cursor:             pointer;
 }
 
 element-icon {
-    size:               240px;
-    padding:            0px;
-    background-color:   transparent;
+    size:               196px;
+    cursor:             inherit;
 }
 
 element-text {
-    background-color:   transparent;
-    text-color:         inherit;
-    padding:            6px 10px 10px 10px;
-    vertical-align:     0.5;
-    horizontal-align:   0.5;
+    text-color:         @rofi-fg;
+    horizontal-align:   0;
+    cursor:             inherit;
+}
+
+element selected.normal,
+element selected.active {
+    background-color:   @rofi-accent;
+}
+
+element selected.normal element-text,
+element selected.active element-text {
+    text-color:         @rofi-bg;
+}
+
+element normal.active element-text,
+element alternate.active element-text {
+    text-color:         @rofi-accent;
+}
+
+error-message {
+    padding:            20px;
 }

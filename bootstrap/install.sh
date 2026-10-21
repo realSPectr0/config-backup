@@ -331,6 +331,11 @@ restore_local_files() {
     restore "$boot/local-share/startpage" "$HOME/.local/share/startpage"
     fix_home_paths "$HOME/.local/share/startpage"
 
+    # PHNexus dock (started by waybar-theme.sh for the PHNexus bar).
+    restore "$boot/local-share/dock-bar" "$HOME/.local/share/dock-bar"
+    fix_home_paths "$HOME/.local/share/dock-bar"
+    ln -sfn "$HOME/.local/share/dock-bar/bin/dock-bar" "$HOME/.local/bin/dock-bar"
+
     # qylock: quickshell lockscreen (Super+L) + its themes, also used by SDDM.
     local qylock="$HOME/QyLock/qylock"
     if [[ ! -d "$qylock/.git" ]]; then

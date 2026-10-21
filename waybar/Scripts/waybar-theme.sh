@@ -19,10 +19,10 @@ fi
 # Use "qsm:<path>" for qs_manager.sh-based bars (multi-process).
 # Use "caffyne:<path>" for the standalone Fabric-based Caffyne shell.
 declare -A THEMES
-THEMES["  Complex"]="main.jsonc|main.css|maincolors.css"
 THEMES["  Minimal"]="minmal.jsonc|minimal.css|minimalcolor.css"
-THEMES["  Fugly"]="fugly.jsonc|fugly.css|maincolors.css"
 THEMES["  Whitewashed"]="whitewashed.jsonc|whitewashed.css|maincolors.css"
+# PHNexus (github.com/PHNexus/Hyprland-configs): waybar plus its quickshell dock.
+THEMES["  PHNexus"]="phnexus.jsonc|phnexus.css|maincolors.css"
 THEMES["  Nocturne"]="qs:$QS_BAR_DIR||"
 THEMES["  Luminary"]="qsm:$QS_MANAGER||"
 THEMES["  Caffyne"]="caffyne:$CAFFYNE_START||"
@@ -39,10 +39,9 @@ elif [[ -n "${1:-}" ]]; then
         nocturne|qs|quickshell) CHOSEN="  Nocturne" ;;
         luminary) CHOSEN="  Luminary" ;;
         caffyne|fabric) CHOSEN="  Caffyne" ;;
-        complex|main) CHOSEN="  Complex" ;;
         minimal|minmal) CHOSEN="  Minimal" ;;
-        fugly) CHOSEN="  Fugly" ;;
         white|whitewashed) CHOSEN="  Whitewashed" ;;
+        phnexus|nexus) CHOSEN="  PHNexus" ;;
         *) CHOSEN="$1" ;;
     esac
 else
@@ -89,6 +88,8 @@ stop_qs_bar() {
     pkill -f "quickshell.*TopBar\.qml" 2>/dev/null || true
     pkill -f "quickshell.*Main\.qml" 2>/dev/null || true
     pkill -f "quickshell.*Floating\.qml" 2>/dev/null || true
+    # PHNexus dock
+    timeout 3s qs kill -p "$HOME/.local/share/dock-bar" >/dev/null 2>&1 || true
 }
 
 stop_caffyne() {
@@ -137,4 +138,7 @@ else
     ln -sf "$WAYBAR_DIR/$STYLE"  "$WAYBAR_DIR/style.css"
     ln -sf "$WAYBAR_DIR/$COLORS" "$WAYBAR_DIR/colors.css"
     waybar &
+    if [[ "$CHOSEN" == "  PHNexus" ]]; then
+        "$HOME/.local/bin/dock-bar" start >/dev/null 2>&1 &
+    fi
 fi

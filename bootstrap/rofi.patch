@@ -23,52 +23,302 @@ index c0b4d33..bf9b322 100755
 +  -show drun \
 +  -theme ${dir}/${theme}.rasi
 diff --git a/files/launchers/type-6/style-6.rasi b/files/launchers/type-6/style-6.rasi
-index 7056c85..bc69005 100644
+index 7056c85..267db6b 100644
 --- a/files/launchers/type-6/style-6.rasi
 +++ b/files/launchers/type-6/style-6.rasi
-@@ -8,6 +8,8 @@
+@@ -1,209 +1,146 @@
+ /**
+- *
+- * Author : Aditya Shakya (adi1090x)
+- * Github : @adi1090x
+- * 
+- * Rofi Theme File
+- * Rofi Version: 1.7.3
++ * App launcher in the PHNexus desktop style: translucent near-black blocks,
++ * 12-16px radii, white-on-grey text and #2a2a30 selection pills, matching
++ * ~/.config/waybar/phnexus.css and ~/.config/wofi/style.css.
   **/
  
- /*****----- Configuration -----*****/
-+@import "/home/arch/.config/rofi/wallpaper-colors.rasi"
-+
+-/*****----- Configuration -----*****/
  configuration {
- 	modi:                       "drun,run,filebrowser,window";
+-	modi:                       "drun,run,filebrowser,window";
++    modi:                       "drun,run,filebrowser,window";
      show-icons:                 true;
-@@ -22,12 +24,12 @@ configuration {
- /*****----- Global Properties -----*****/
+-    display-drun:               "APPS";
+-    display-run:                "RUN";
+-    display-filebrowser:        "FILES";
+-    display-window:             "WINDOW";
+-	drun-display-format:        "{name}";
+-	window-format:              "{w} · {c} · {t}";
++    display-drun:               "  Apps";
++    display-run:                "  Run";
++    display-filebrowser:        "  Files";
++    display-window:             "  Windows";
++    drun-display-format:        "{name}";
++    window-format:              "{c} · {t}";
+ }
+ 
+-/*****----- Global Properties -----*****/
  * {
-     font:                        "JetBrains Mono Nerd Font 10";
+-    font:                        "JetBrains Mono Nerd Font 10";
 -    background:                  #D0D0D0;
 -    background-alt:              #E9E9E9;
 -    foreground:                  #161616;
 -    selected:                    #BEBEBE;
 -    active:                      #999999;
 -    urgent:                      #808080;
-+    background:                  @rofi-bg;
-+    background-alt:              @rofi-bg-alt;
-+    foreground:                  @rofi-fg;
-+    selected:                    @rofi-selected-strong;
-+    active:                      @rofi-active;
-+    urgent:                      @rofi-urgent;
++    font:                        "FiraCode Nerd Font 11";
++    panel:                       rgba(10, 10, 12, 0.85);
++    block:                       rgba(255, 255, 255, 0.05);
++    hover:                       #1e1e23;
++    pill:                        #2a2a30;
++    text:                        #fafafa;
++    dim:                         #8a8a8a;
++    faint:                       #565656;
++    background-color:            transparent;
++    text-color:                  @text;
  }
  
- /*****----- Main Window -----*****/
-@@ -43,6 +45,8 @@ window {
- 
-     /* properties for all widgets */
-     enabled:                     true;
-+    border:                      2px;
-+    border-color:                @rofi-border;
-     border-radius:               15px;
+-/*****----- Main Window -----*****/
+ window {
+-    /* properties for window widget */
+     transparency:                "real";
+     location:                    center;
+     anchor:                      center;
+-    fullscreen:                  false;
+-    width:                       1000px;
+-    x-offset:                    0px;
+-    y-offset:                    0px;
+-
+-    /* properties for all widgets */
+-    enabled:                     true;
+-    border-radius:               15px;
++    width:                       460px;
++    border:                      1px;
++    border-color:                rgba(255, 255, 255, 0.06);
++    border-radius:               16px;
++    background-color:            @panel;
      cursor:                      "default";
-     background-color:            @background;
-@@ -60,7 +64,7 @@ mainbox {
- imagebox {
-     padding:                     20px;
-     background-color:            transparent;
+-    background-color:            @background;
+ }
+ 
+-/*****----- Main Box -----*****/
+ mainbox {
+-    enabled:                     true;
+-    spacing:                     0px;
+-    background-color:            transparent;
+-    orientation:                 horizontal;
+-    children:                    [ "imagebox", "listbox" ];
+-}
+-
+-imagebox {
+-    padding:                     20px;
+-    background-color:            transparent;
 -    background-image:            url("~/.config/rofi/images/f.png", height);
-+    background-image:            @rofi-wallpaper-image;
-     orientation:                 vertical;
-     children:                    [ "inputbar", "dummy", "mode-switcher" ];
+-    orientation:                 vertical;
+-    children:                    [ "inputbar", "dummy", "mode-switcher" ];
+-}
+-
+-listbox {
+-    spacing:                     20px;
+-    padding:                     20px;
+-    background-color:            transparent;
+-    orientation:                 vertical;
+-    children:                    [ "message", "listview" ];
+-}
+-
+-dummy {
+-    background-color:            transparent;
++    spacing:                     10px;
++    padding:                     12px;
++    children:                    [ "inputbar", "message", "listview", "mode-switcher" ];
+ }
+ 
+-/*****----- Inputbar -----*****/
++/*****----- Search -----*****/
+ inputbar {
+-    enabled:                     true;
+-    spacing:                     10px;
+-    padding:                     15px;
+-    border-radius:               10px;
+-    background-color:            @background-alt;
+-    text-color:                  @foreground;
++    spacing:                     8px;
++    padding:                     10px 14px;
++    border-radius:               12px;
++    background-color:            @block;
+     children:                    [ "textbox-prompt-colon", "entry" ];
+ }
+ textbox-prompt-colon {
+-    enabled:                     true;
+     expand:                      false;
+-    str:                         "";
+-    background-color:            inherit;
+-    text-color:                  inherit;
++    str:                         " ";
++    vertical-align:              0.5;
++    text-color:                  @dim;
+ }
+ entry {
+-    enabled:                     true;
+-    background-color:            inherit;
+-    text-color:                  inherit;
+     cursor:                      text;
+-    placeholder:                 "Search";
+-    placeholder-color:           inherit;
+-}
+-
+-/*****----- Mode Switcher -----*****/
+-mode-switcher{
+-    enabled:                     true;
+-    spacing:                     20px;
+-    background-color:            transparent;
+-    text-color:                  @foreground;
+-}
+-button {
+-    padding:                     15px;
+-    border-radius:               10px;
+-    background-color:            @background-alt;
+-    text-color:                  inherit;
+-    cursor:                      pointer;
+-}
+-button selected {
+-    background-color:            @selected;
+-    text-color:                  @foreground;
++    vertical-align:              0.5;
++    placeholder:                 "Search...";
++    placeholder-color:           @faint;
+ }
+ 
+-/*****----- Listview -----*****/
++/*****----- Results -----*****/
+ listview {
+-    enabled:                     true;
+     columns:                     1;
+     lines:                       8;
+     cycle:                       true;
+     dynamic:                     true;
+     scrollbar:                   false;
+-    layout:                      vertical;
+-    reverse:                     false;
+     fixed-height:                true;
+-    fixed-columns:               true;
+-    
+-    spacing:                     10px;
+-    background-color:            transparent;
+-    text-color:                  @foreground;
++    spacing:                     2px;
+     cursor:                      "default";
+ }
+-
+-/*****----- Elements -----*****/
+ element {
+-    enabled:                     true;
+-    spacing:                     15px;
+-    padding:                     8px;
+-    border-radius:               10px;
+-    background-color:            transparent;
+-    text-color:                  @foreground;
++    spacing:                     12px;
++    padding:                     7px 10px;
++    border-radius:               12px;
++    text-color:                  @dim;
+     cursor:                      pointer;
+ }
+-element normal.normal {
+-    background-color:            inherit;
+-    text-color:                  inherit;
+-}
+-element normal.urgent {
+-    background-color:            @urgent;
+-    text-color:                  @foreground;
+-}
+-element normal.active {
+-    background-color:            @active;
+-    text-color:                  @foreground;
++element normal.normal,
++element alternate.normal,
++element normal.active,
++element alternate.active {
++    background-color:            transparent;
++    text-color:                  @dim;
+ }
+-element selected.normal {
+-    background-color:            @selected;
+-    text-color:                  @foreground;
++element normal.urgent,
++element alternate.urgent {
++    background-color:            transparent;
++    text-color:                  #e06c75;
+ }
++element selected.normal,
++element selected.active,
+ element selected.urgent {
+-    background-color:            @urgent;
+-    text-color:                  @foreground;
+-}
+-element selected.active {
+-    background-color:            @urgent;
+-    text-color:                  @foreground;
++    background-color:            @pill;
++    text-color:                  @text;
+ }
+ element-icon {
+-    background-color:            transparent;
++    size:                        26px;
+     text-color:                  inherit;
+-    size:                        32px;
+     cursor:                      inherit;
+ }
+ element-text {
+-    background-color:            transparent;
+     text-color:                  inherit;
+-    cursor:                      inherit;
+     vertical-align:              0.5;
+-    horizontal-align:            0.0;
++    cursor:                      inherit;
+ }
+ 
+-/*****----- Message -----*****/
+-message {
+-    background-color:            transparent;
++/*****----- Mode tabs -----*****/
++mode-switcher {
++    spacing:                     6px;
++}
++button {
++    font:                        "FiraCode Nerd Font 10";
++    padding:                     8px 0px;
++    border-radius:               12px;
++    background-color:            @block;
++    text-color:                  @dim;
++    horizontal-align:            0.5;
++    cursor:                      pointer;
++}
++button selected {
++    background-color:            @pill;
++    text-color:                  @text;
+ }
++
++/*****----- Messages -----*****/
+ textbox {
+-    padding:                     15px;
+-    border-radius:               10px;
+-    background-color:            @background-alt;
+-    text-color:                  @foreground;
+-    vertical-align:              0.5;
+-    horizontal-align:            0.0;
++    padding:                     10px 14px;
++    border-radius:               12px;
++    background-color:            @block;
++    text-color:                  @dim;
+ }
+ error-message {
+-    padding:                     15px;
+-    border-radius:               20px;
+-    background-color:            @background;
+-    text-color:                  @foreground;
++    padding:                     14px;
++    border-radius:               16px;
++    background-color:            @panel;
  }

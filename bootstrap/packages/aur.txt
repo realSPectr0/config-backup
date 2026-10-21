@@ -25,7 +25,6 @@ hyprshade
 iwdgui
 legcord-bin
 masterpdfeditor
-microsoft-edge-stable-bin
 mimikatz
 minecraft-launcher
 mssql-tools

@@ -29,7 +29,7 @@ log "Home dotfiles (secrets are NOT copied; see README)"
 cp -a "$HOME/.bashrc" "$HOME/.bash_profile" "$HOME/.gtkrc-2.0" "$boot/home-dotfiles/" 2>/dev/null || true
 
 log "~/.local/bin helpers"
-for f in caffyne-control caffyne-fastfetch fabric-cli memguard ani-cli; do
+for f in caffyne-control caffyne-fastfetch fabric-cli memguard ani-cli settings calweather; do
     [[ -f "$HOME/.local/bin/$f" ]] && cp -a "$HOME/.local/bin/$f" "$boot/local-bin/"
 done
 
@@ -37,6 +37,8 @@ log "~/.local/share data"
 rsync -a --delete "$HOME/.local/share/startpage/" "$boot/local-share/startpage/"
 rsync -a --delete --exclude themes_link \
     "$HOME/.local/share/quickshell-lockscreen/" "$boot/local-share/quickshell-lockscreen/"
+# PHNexus dock (~/.local/bin/dock-bar is a symlink into it).
+rsync -a --delete "$HOME/.local/share/dock-bar/" "$boot/local-share/dock-bar/"
 
 log "Wallpapers"
 rsync -a --delete "$HOME/Pictures/Wallpapers/" "$boot/wallpapers/"

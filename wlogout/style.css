@@ -20,8 +20,9 @@ button {
     border-style: solid;
 	border-width: 0px;
     background-repeat: no-repeat;
-    background-position: center;
-    background-size: 20%;
+    background-position: center 38%;
+    background-size: 64px;
+    padding-top: 110px;
     box-shadow: none;
     text-shadow: none;
     animation: gradient_f 20s ease-in infinite;
@@ -34,14 +35,14 @@ button:focus {
 
 button:hover {
     background-color: @on_secondary_fixed_variant;
-    background-size: 30%;
+    background-size: 76px;
     animation: gradient_f 20s ease-in infinite;
     transition: all 0.3s cubic-bezier(.55,0.0,.28,1.682);
 }
 
 /* Adjust the size of the icon or content inside the button */
 button span {
-    font-size: 1.2em; /* Increase the font size */
+    font-size: 1em;
 }
 
 

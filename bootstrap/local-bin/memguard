@@ -2,7 +2,7 @@
 # memguard: when used RAM goes above a threshold, close apps in priority order.
 # Used = MemTotal - MemAvailable (same as "used" in btop/free, ignoring cache).
 
-THRESHOLD_MB=${MEMGUARD_THRESHOLD_MB:-15155}   # 14.8 GiB (MiB units)
+THRESHOLD_MB=${MEMGUARD_THRESHOLD_MB:-14950}   # 14.6 GiB (MiB units)
 INTERVAL=${MEMGUARD_INTERVAL:-5}               # seconds between checks
 COOLDOWN=${MEMGUARD_COOLDOWN:-20}              # wait after closing something
 
@@ -10,7 +10,26 @@ COOLDOWN=${MEMGUARD_COOLDOWN:-20}              # wait after closing something
 TARGETS=(
   "Discord:/discord/app-[^/]+/Discord"
   "Zen:/opt/zen-browser-bin/zen-bin"
+  "Legcord:/usr/lib/legcord|/usr/bin/legcord"
+  "Spotify:/opt/spotify/spotify"
+  "Zoom:/opt/zoom/zoom"
+  "Heroic:/opt/Heroic/heroic"
+  "Steam:ubuntu12_32/steam( |$)"
+  "Minecraft:prismlauncher|minecraft-launcher|net\.minecraft\.client"
+  "Firefox:/usr/lib/firefox/firefox"
+  "Obsidian:/usr/lib/obsidian"
+  "GitHub Desktop:/usr/lib/github-desktop|/usr/bin/github-desktop"
+  "Wireshark:/usr/bin/wireshark"
+  "Godot:Godot_v[0-9.]+-stable"
+  "VSCodium:/opt/vscodium-bin/codium"
+  "LibreOffice:soffice\.bin"
+  "Blender:(^|/)blender( |$)"
+  "Shotcut:/usr/bin/shotcut"
+  "Kdenlive:/usr/bin/kdenlive"
+  "OBS:/usr/bin/obs( |$)"
+  "Burp Suite:burpsuite\.jar"
 )
+# Never touched: terminals (kitty), Hyprland, bars/shell, VMs, anything else.
 
 used_mb() {
   awk '/^MemTotal:/{t=$2} /^MemAvailable:/{a=$2} END{print int((t-a)/1024)}' /proc/meminfo

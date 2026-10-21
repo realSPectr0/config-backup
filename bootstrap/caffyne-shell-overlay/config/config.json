@@ -8,7 +8,7 @@
   "bars": {
     "configs": [
       {
-        "monitor": 1,
+        "monitor": 2,
         "bars": [
           {
             "alignment": "bottom",
@@ -41,7 +41,11 @@
             ]
           }
         ],
-        "floating_bar": false
+        "floating_bar": false,
+        "models": [
+          "LG ULTRAGEAR",
+          "NE160WUM"
+        ]
       }
     ]
   },

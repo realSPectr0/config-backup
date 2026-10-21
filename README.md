@@ -5,6 +5,20 @@ swaync, wlogout, kitty, fastfetch, cava, nvim, fcitx5, systemd user services,
 package manifests, and everything needed to rebuild the desktop on a new
 machine.
 
+## Screenshots
+
+PHNexus waybar (current bar, `Super+Shift+W` to switch themes):
+
+![Desktop with the PHNexus bar](screenshots/desktop.png)
+
+Calendar + weather popup (click the clock):
+
+![Calendar and weather popup](screenshots/calweather.png)
+
+Settings center (`Super+Esc`):
+
+![Settings center](screenshots/settings.png)
+
 ## Restore on a new Arch machine
 
 Start from a fresh Arch install with a normal user that can `sudo`, then:

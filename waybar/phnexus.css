@@ -1,0 +1,252 @@
+@import url("/home/arch/.cache/wal/colors-waybar.css");
+
+/* ============================================================================== */
+/* GLOBAL STYLES                                                                  */
+/* ============================================================================== */
+* {
+    font-weight: bold;
+    font-size: 13px;
+    transition: all 0.5s cubic-bezier(0, 0.5, 0.35, 1);
+}
+
+window#waybar {
+    background-color: transparent;
+    border-radius: 0;
+    margin-top: 10px; 
+}
+
+.modules-left,
+.modules-center,
+.modules-right {
+    padding: 3px 6px; 
+    margin: 4px 6px 0 6px; 
+    background-color: transparent; 
+}
+
+/* ============================================================================== */
+/* TRANSLUCENT DARK BLOCKS WITHOUT TEXT GLOW (WOFI/QML STYLE)                     */
+/* ============================================================================== */
+                        
+#workspaces,
+#clock,
+#custom-logo,
+#custom-recorder,
+#monitor,
+#settings,
+#media {
+    background-color: rgba(10, 10, 12, 0.85);
+    border-radius: 12px; 
+    padding: 1px 11px 3px 13px; 
+    margin: -1px 4px -1px 1px; 
+    color: #fafafa;
+    text-shadow: none; 
+    box-shadow: 0 0 0px #000000;
+    font-size: 12px;
+}
+
+#custom-notification {
+    background-color: rgba(10, 10, 12, 0.85);
+    border-radius: 12px; 
+    padding: 2px 6px 3px 6px; 
+    margin: -1px 0px -1px 1px; 
+    color: #fafafa;
+    text-shadow: none; 
+    box-shadow: 0 0 0px #000000;
+    min-width: 28px;
+    font-family: monospace;
+    font-size: 13px;
+}
+
+#custom-power {
+    background-color: rgba(10, 10, 12, 0.85);
+    border-radius: 12px; 
+    padding: 2px 6px 3px 6px; 
+    margin: -1px 4px -1px 5px; 
+    color: #fafafa;
+    text-shadow: none; 
+    box-shadow: 0 0 0px #000000;
+    min-width: 28px;
+    font-family: "JetBrainsMono NFM";
+    font-size: 17px;
+}
+
+#custom-logo {
+    padding: 0px 17px 1px 15px;
+    font-size: 15px;
+}
+
+/* ============================================================================== */
+/* WORKSPACES                                                                     */
+/* ============================================================================== */
+#hworkspaces {
+    margin: 0;
+    padding: 0;
+    background-color: transparent;
+}
+
+#workspaces {
+    padding: 5px 5px;
+}
+
+/* Every pill shares the same box and gap so the dots sit evenly. Dot colours come from the
+   matugen palette (~/.cache/wal/colors-waybar.css): the focused one gets the
+   accent, the rest share one colour. */
+#workspaces button {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    padding: 0;
+    margin: 0 2px;
+    min-width: 24px;
+    min-height: 20px;
+    font-size: 11px;
+    opacity: 1;
+}
+
+#workspaces button label {
+    padding: 0;
+    margin: 0;
+    color: @color8;
+}
+
+#workspaces button.active label {
+    color: @color1;
+}
+
+#workspaces button.urgent {
+    background-color: alpha(@color9, 0.35);
+}
+
+#workspaces button.overview {
+    background-color: rgba(255, 255, 255, 0.1);
+    opacity: 0.4;
+}
+
+#workspaces button.overview.active {
+    background-color: rgba(255, 255, 255, 0.05);
+    opacity: 1;
+}
+
+/* ============================================================================== */
+/* MODULES INSIDE GROUPS                                                          */
+/* ============================================================================== */
+#custom-monitor,
+#custom-settings,
+#cpu,
+#memory,
+#temperature,
+#battery,
+#power-profiles-daemon,
+#tray,
+#pulseaudio,
+#backlight {
+    background-color: transparent;
+    color: rgb(255, 255, 255);
+    margin: 2px;
+    padding: 0 3px; 
+    min-width: 15px; 
+    text-shadow: none;
+    font-size: 12px;
+}
+
+/* ============================================================================== */
+/* SLIDERS                                                                        */
+/* ============================================================================== */
+#backlight-slider slider,
+#pulseaudio-slider slider {
+    opacity: 0;
+    background-image: none;
+    border: none;
+    box-shadow: none;
+    background: none;
+}
+
+#backlight-slider,
+#pulseaudio-slider {
+    padding: 0;
+    margin: 0;
+}
+
+#backlight-slider scale,
+#pulseaudio-slider scale {
+    padding: 0;
+    margin: 0;
+    min-width: 0;
+}
+
+#backlight-slider trough,
+#pulseaudio-slider trough {
+    min-width: 40px; 
+    min-height: 5px; 
+    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.15);
+    margin: 0 3px;
+}
+
+#backlight-slider highlight,
+#pulseaudio-slider highlight {
+    min-width: 5px;
+    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.15);
+    box-shadow: none;
+}
+
+/* ============================================================================== */
+/* HOVER EFFECTS (EXPANDING)                                                      */
+/* ============================================================================== */
+#clock:hover,
+#custom-logo:hover,
+#custom-recorder:hover {
+    background-color: #141417;
+}
+
+#custom-notification:hover,
+#custom-power:hover {
+    min-width: 34px;
+    background-color: #141417;
+}
+
+#workspaces button:hover {
+    min-width: 24px; 
+    background-color: #141417;
+}
+
+#power-profiles-daemon:hover,
+#cpu:hover,
+#memory:hover,
+#temperature:hover,
+#battery:hover,
+#pulseaudio:hover,
+#backlight:hover {
+    border-radius: 7px;
+    padding: 0 6px;
+}
+
+#custom-monitor:hover,
+#custom-settings:hover {
+    border-radius: 7px;
+    padding: 0 6px;
+}
+
+/* ============================================================================== */
+/* TOOLTIPS                                                                       */
+/* ============================================================================== */
+tooltip {
+    background: rgba(10, 10, 12, 0.95);
+    border-radius: 12px;
+    padding: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+tooltip label {
+    color: #fafafa;
+    text-shadow: none;
+}
+
+/* ============================================================================== */
+/* ANIMATIONS                                                                     */
+/* ============================================================================== */
+@keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 0.4; }
+    100% { opacity: 1; }
+}

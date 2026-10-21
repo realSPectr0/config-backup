@@ -1,8 +1,58 @@
 diff --git a/bar.py b/bar.py
-index 441c741..508ff1d 100644
+index 441c741..035eb47 100644
 --- a/bar.py
 +++ b/bar.py
-@@ -1759,6 +1759,12 @@ class BarManager:
+@@ -1735,6 +1735,7 @@ class BarManager:
+         self._fallback_popups: dict[str, AppletWindow] = {}
+         self._display = Gdk.Display.get_default()
+         self._standalone_windows: dict[str, object] = {}
++        self._resolve_config_monitors()
+         for i in range(self._display.get_n_monitors()):
+             monitor = self._display.get_monitor(i)
+             self._add_bar(monitor, i)
+@@ -1745,6 +1746,41 @@ class BarManager:
+         )
+         self._display.connect("monitor-removed", self._on_monitor_removed)
+ 
++    def _resolve_config_monitors(self) -> bool:
++        """Point configs with a "models" preference list at the first connected match.
++
++        GDK indices shift with connector renames/hotplug, so match on the monitor
++        model instead. Returns True if any config's monitor index changed.
++        """
++        models = [
++            (self._display.get_monitor(i).get_model() or "").lower()
++            for i in range(self._display.get_n_monitors())
++        ]
++        changed = False
++        for cfg in user_options.bars.configs:
++            prefs = cfg.get("models")
++            if not prefs:
++                continue
++            target = next(
++                (i for pref in prefs for i, m in enumerate(models) if pref.lower() in m),
++                -1,
++            )
++            if cfg.get("monitor") != target:
++                cfg["monitor"] = target
++                changed = True
++        return changed
++
++    def _sync_bars(self) -> bool:
++        # Rebuild everything if the preferred monitor moved; bars cache their index
++        if self._resolve_config_monitors() or any(
++            self._display.get_monitor(b.monitor_id) != m for (m, _), b in self._bars.items()
++        ):
++            for key in list(self._bars):
++                self._bars.pop(key).destroy()
++        for i in range(self._display.get_n_monitors()):
++            self._add_bar(self._display.get_monitor(i), i)
++        return False
++
+     def _add_bar(self, monitor: Gdk.Monitor, monitor_id: int) -> None:
+         if monitor not in self._notifications:
+             self._notifications[monitor] = NotificationWindow(monitor_id)
+@@ -1759,6 +1795,12 @@ class BarManager:
              (c for c in user_options.bars.configs if c.get("monitor") == monitor_id),
              None,
          )
@@ -15,6 +65,27 @@ index 441c741..508ff1d 100644
          if monitor_cfg is None:
              print(f"[BarManager] no config for monitor_id={monitor_id}, skipping bars")
              return
+@@ -1799,11 +1841,7 @@ class BarManager:
+                 widget.destroy()
+                 
+     def _on_monitor_added(self, display: Gdk.Display, monitor: Gdk.Monitor) -> None:
+-        for i in range(display.get_n_monitors()):
+-            if display.get_monitor(i) == monitor:
+-                self._add_bar(monitor, i)
+-                break
+-        return False
++        return self._sync_bars()
+     
+     def _on_monitor_removed(self, display, monitor):
+         for key in [k for k in self._bars if k[0] == monitor]:
+@@ -1813,6 +1851,7 @@ class BarManager:
+ 
+     def _on_monitor_removed(self, display: Gdk.Display, monitor: Gdk.Monitor) -> None:
+         self._remove_bar(monitor)
++        GLib.timeout_add(1000, self._sync_bars)
+ 
+ 
+     def toggle(self, key: str):
 diff --git a/bar_widgets/clock.py b/bar_widgets/clock.py
 index 536f9a2..cf2242d 100644
 --- a/bar_widgets/clock.py

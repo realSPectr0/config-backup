@@ -1,5 +1,5 @@
 [Unit]
-Description=Close Discord/Zen when RAM usage exceeds 14.8 GiB
+Description=Close apps (Discord, Zen, then fallback list) when RAM usage exceeds 14.6 GiB
 After=graphical-session.target
 
 [Service]

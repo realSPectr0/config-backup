@@ -1,0 +1,22 @@
+{
+  "monitors": {
+    "DP-4": {
+      "mode": "1920x1080@200.07",
+      "position": "1536x20",
+      "scale": 1,
+      "disabled": false
+    },
+    "eDP-1": {
+      "mode": "1920x1200@165.01",
+      "position": "0x76",
+      "disabled": false,
+      "scale": 1.25
+    },
+    "HDMI-A-1": {
+      "mode": "1920x1080@74.97",
+      "position": "3456x10",
+      "disabled": false,
+      "scale": 1
+    }
+  }
+}

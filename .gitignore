@@ -59,6 +59,8 @@ mpd/state
 systemd/user/*.wants/
 !bootstrap/
 !bootstrap/**
+!screenshots/
+!screenshots/**
 
 # Allow standalone config files
 !starship.toml

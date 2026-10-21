@@ -1,2 +1,2 @@
 #!/bin/zsh
-wlogout
+exec ~/.local/bin/wlogout-launch.sh

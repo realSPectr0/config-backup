@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# Toggle the calendar + weather popup (~/.config/quickshell/calweather).
+# The popup quits itself when dismissed, so "running" means "open".
+CONFIG="$HOME/.config/quickshell/calweather"
+if qs list -p "$CONFIG" 2>/dev/null | grep -q 'Instance'; then
+    qs kill -p "$CONFIG" >/dev/null 2>&1
+else
+    qs -n -d -p "$CONFIG" >/dev/null 2>&1
+fi

@@ -68,6 +68,10 @@ if command -v wal >/dev/null 2>&1; then
 fi
 bash "$HOME/.config/caffyne-shell/scripts/reload-kitty.sh"
 
+# Waybar themes that @import ~/.cache/wal/colors-waybar.css only pick up the
+# new palette on a style reload.
+pkill -USR2 -x waybar 2>/dev/null || true
+
 python3 "$SCRIPT_DIR/rofi-wallpaper-theme.py" "$WALLPAPER" >/dev/null 2>&1 || true
 
 # Keep Cava on the same primary -> accent gradient as the Hyprland border.
@@ -107,5 +111,6 @@ fi
 bash ~/tauon/sync-theme.sh 2>/dev/null
 
 # Sync swaync colors
-bash "$SCRIPT_DIR/swaync-colors.sh" 2>/dev/null
+# PHNexus swaync style in use; regenerating would overwrite it
+# bash "$SCRIPT_DIR/swaync-colors.sh" 2>/dev/null
 echo "Wallpaper: $(basename "$WALLPAPER")"
